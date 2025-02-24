@@ -32,7 +32,7 @@ export class CertificateStack extends cdk.Stack {
 
     new cdk.CfnOutput(this, 'CertificateArn', {
       value: certificate.certificateArn,
-      exportName: 'AsaRacingCertificateArn'
+      exportName: 'altiverrCertificateArn'
     });
   }
 }

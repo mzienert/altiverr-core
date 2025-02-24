@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import 'source-map-support/register';
 import * as cdk from 'aws-cdk-lib';
-import { AsaRacingStack } from '../lib/asa-racing-stack';
+import { AltiverrStack } from '../lib/altiverr-stack';
 import { CertificateStack } from '../lib/certificate-stack';
 import * as dotenv from 'dotenv';
 
@@ -27,7 +27,7 @@ if (stackName === 'cert') {
     },
     tags: {
       Environment: 'production',
-      Project: 'AsaRacing'
+      Project: 'Altiverr'
     }
   });
 } else {
@@ -36,14 +36,13 @@ if (stackName === 'cert') {
     throw new Error('Valid CERTIFICATE_ARN environment variable is required');
   }
 
-  new AsaRacingStack(app, 'AsaRacingStack', {
+  new AltiverrStack(app, 'AltiverrStack', {
     env: {
       account: process.env.CDK_DEFAULT_ACCOUNT,
       region: process.env.CDK_DEFAULT_REGION,
     },
     stage: process.env.STAGE || 'dev',
     certificateArn: process.env.CERTIFICATE_ARN!,
-    allowedOrigin: process.env.ALLOWED_ORIGIN || 'http://localhost:3000',
     githubOwner: process.env.GITHUB_OWNER!,
     githubRepo: process.env.GITHUB_REPO!,
     githubBranch: process.env.GITHUB_BRANCH!,

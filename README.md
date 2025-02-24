@@ -1,11 +1,11 @@
-# asaRacing Core
+# altiverr Core
 
-Part of the asaRacing Stack - A rapid application deployment framework
+Part of the altiverr Stack - A rapid application deployment framework
 
 ## Version Compatibility
-- asaRacing-ui: v0.1.0
-- asaRacing-core: v0.1.0
-- asaRacing-api: v0.1.0
+- altiverr-ui: v0.1.0
+- altiverr-core: v0.1.0
+- altiverr-api: v0.1.0
 
 ## Quick Start
 [Instructions]
@@ -14,4 +14,4 @@ Part of the asaRacing Stack - A rapid application deployment framework
 [Configuration details]
 
 ## Integration Points
-[How this connects with other asaRacing components]
+[How this connects with other altiverr components]

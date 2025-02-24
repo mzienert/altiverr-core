@@ -1,15 +1,15 @@
 {
-  "name": "asa-racing-core",
+  "name": "altiverr-core",
   "version": "0.1.0",
   "bin": {
-    "asaRacing-core": "bin/asaRacing-core.js"
+    "altiverr-core": "bin/altiverr-core.js"
   },
   "scripts": {
     "build": "tsc",
     "watch": "tsc -w",
     "test": "jest",
     "cdk:deploy": "cdk deploy",
-    "cdk:deploy:cert": "cdk deploy --app \"npx ts-node bin/asa-racing.ts cert\" AsaRacingCertStack",
+    "cdk:deploy:cert": "cdk deploy --app \"npx ts-node bin/altiverr.ts cert\" altiverrCertStack",
     "cdk:destroy": "cdk destroy",
     "cdk:synth": "cdk synth"
   },

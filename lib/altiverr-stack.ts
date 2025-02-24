@@ -5,9 +5,9 @@ import * as route53 from 'aws-cdk-lib/aws-route53';
 import * as targets from 'aws-cdk-lib/aws-route53-targets';
 
 import { S3Construct } from './constructs/storage/s3-construct';
-import { asaRacingUIPipelineConstruct } from './constructs/pipeline/asa-racing-pipeline-construct';
+import { altiverrUIPipelineConstruct } from './constructs/pipeline/altiverr-pipeline-construct';
 
-export interface AsaRacingStackProps extends cdk.StackProps {
+export interface altiverrStackProps extends cdk.StackProps {
   stage: string;
   certificateArn: string;
   githubOwner: string;
@@ -16,8 +16,8 @@ export interface AsaRacingStackProps extends cdk.StackProps {
   githubTokenSecretName: string;
 }
 
-export class AsaRacingStack extends cdk.Stack {
-  constructor(scope: Construct, id: string, props: AsaRacingStackProps) {
+export class AltiverrStack extends cdk.Stack {
+  constructor(scope: Construct, id: string, props: altiverrStackProps) {
     super(scope, id, props);
 
     if (!props.certificateArn.startsWith('arn:aws:acm:')) {
@@ -29,7 +29,7 @@ export class AsaRacingStack extends cdk.Stack {
 
     // Create NextJS Pipeline
     const certificate = acm.Certificate.fromCertificateArn(this, 'Certificate', props.certificateArn);
-    const nextjsPipelineConstruct = new asaRacingUIPipelineConstruct(this, 'AsaRacingNextJSPipelineConstructV2', {
+    const nextjsPipelineConstruct = new altiverrUIPipelineConstruct(this, 'altiverrNextJSPipelineConstructV2', {
       githubOwner: props.githubOwner,
       githubRepo: props.githubRepo,
       githubBranch: props.githubBranch,

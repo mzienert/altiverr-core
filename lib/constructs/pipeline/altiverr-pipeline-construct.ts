@@ -10,7 +10,7 @@ import { Construct } from 'constructs';
 import * as iam from 'aws-cdk-lib/aws-iam';
 import * as acm from 'aws-cdk-lib/aws-certificatemanager';
 
-export interface asaRacingUIPipelineConstructProps {
+export interface altiverrUIPipelineConstructProps {
   readonly githubOwner: string;
   readonly githubRepo: string;
   readonly githubBranch: string;
@@ -19,11 +19,11 @@ export interface asaRacingUIPipelineConstructProps {
   readonly domainNames: string[];
 }
 
-export class asaRacingUIPipelineConstruct extends Construct {
+export class altiverrUIPipelineConstruct extends Construct {
   public readonly pipeline: codepipeline.Pipeline;
   public readonly distribution: cloudfront.Distribution;
 
-  constructor(scope: Construct, id: string, props: asaRacingUIPipelineConstructProps) {
+  constructor(scope: Construct, id: string, props: altiverrUIPipelineConstructProps) {
     super(scope, id);
 
     // Create artifact bucket
@@ -46,7 +46,7 @@ export class asaRacingUIPipelineConstruct extends Construct {
 
     // Create OAI
     const originAccessIdentity = new cloudfront.OriginAccessIdentity(this, 'OAI', {
-      comment: 'OAI for asaracing.live'
+      comment: 'OAI for altiverr.live'
     });
 
     // Grant read permissions to CloudFront
