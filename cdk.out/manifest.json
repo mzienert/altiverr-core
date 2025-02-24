@@ -1,0 +1,807 @@
+{
+  "version": "38.0.1",
+  "artifacts": {
+    "AsaRacingStack.assets": {
+      "type": "cdk:asset-manifest",
+      "properties": {
+        "file": "AsaRacingStack.assets.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+      }
+    },
+    "AsaRacingStack": {
+      "type": "aws:cloudformation:stack",
+      "environment": "aws://619326977873/us-west-1",
+      "properties": {
+        "templateFile": "AsaRacingStack.template.json",
+        "terminationProtection": false,
+        "tags": {
+          "Environment": "dev"
+        },
+        "validateOnSynth": false,
+        "notificationArns": [],
+        "assumeRoleArn": "arn:${AWS::Partition}:iam::619326977873:role/cdk-hnb659fds-deploy-role-619326977873-us-west-1",
+        "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::619326977873:role/cdk-hnb659fds-cfn-exec-role-619326977873-us-west-1",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-619326977873-us-west-1/ed74397f94cc8e740075ed1c84ddda411618c1b1c625e5c3b381352ded182cee.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
+        "additionalDependencies": [
+          "AsaRacingStack.assets"
+        ],
+        "lookupRole": {
+          "arn": "arn:${AWS::Partition}:iam::619326977873:role/cdk-hnb659fds-lookup-role-619326977873-us-west-1",
+          "requiresBootstrapStackVersion": 8,
+          "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+        }
+      },
+      "dependencies": [
+        "AsaRacingStack.assets"
+      ],
+      "metadata": {
+        "/AsaRacingStack": [
+          {
+            "type": "aws:cdk:stack-tags",
+            "data": [
+              {
+                "Key": "Environment",
+                "Value": "dev"
+              }
+            ]
+          }
+        ],
+        "/AsaRacingStack/S3Construct/asaRacingAPIBucket/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "S3ConstructasaRacingAPIBucketCDB90C88"
+          }
+        ],
+        "/AsaRacingStack/S3Construct/asaRacingAPIBucket/Policy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "S3ConstructasaRacingAPIBucketPolicyD2D01430"
+          }
+        ],
+        "/AsaRacingStack/S3Construct/asaRacingAPIBucket/AutoDeleteObjectsCustomResource/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "S3ConstructasaRacingAPIBucketAutoDeleteObjectsCustomResourceA70B874B"
+          }
+        ],
+        "/AsaRacingStack/Custom::S3AutoDeleteObjectsCustomResourceProvider": [
+          {
+            "type": "aws:cdk:is-custom-resource-handler-customResourceProvider",
+            "data": true
+          }
+        ],
+        "/AsaRacingStack/Custom::S3AutoDeleteObjectsCustomResourceProvider/Role": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092"
+          }
+        ],
+        "/AsaRacingStack/Custom::S3AutoDeleteObjectsCustomResourceProvider/Handler": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CustomS3AutoDeleteObjectsCustomResourceProviderHandler9D90184F"
+          }
+        ],
+        "/AsaRacingStack/KlineTable/Table": [
+          {
+            "type": "aws:cdk:hasPhysicalName",
+            "data": {
+              "Ref": "KlineTable986A720B"
+            }
+          }
+        ],
+        "/AsaRacingStack/KlineTable/Table/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "KlineTable986A720B"
+          }
+        ],
+        "/AsaRacingStack/IAMRoles/BuildRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "IAMRolesBuildRoleD76DE982"
+          }
+        ],
+        "/AsaRacingStack/IAMRoles/BuildRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "IAMRolesBuildRoleDefaultPolicy33425913"
+          }
+        ],
+        "/AsaRacingStack/IAMRoles/CodeDeployServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "IAMRolesCodeDeployServiceRole5E16DA96"
+          }
+        ],
+        "/AsaRacingStack/IAMRoles/CodeDeployServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "IAMRolesCodeDeployServiceRoleDefaultPolicy98C02197"
+          }
+        ],
+        "/AsaRacingStack/IAMRoles/LambdaRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "IAMRolesLambdaRole3969EFC6"
+          }
+        ],
+        "/AsaRacingStack/IAMRoles/LambdaRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "IAMRolesLambdaRoleDefaultPolicy833CF6E2"
+          }
+        ],
+        "/AsaRacingStack/AsaRacingNextJSPipelineConstructV2/ArtifactBucket/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "AsaRacingNextJSPipelineConstructV2ArtifactBucket3CBADDEE"
+          }
+        ],
+        "/AsaRacingStack/AsaRacingNextJSPipelineConstructV2/ArtifactBucket/Policy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "AsaRacingNextJSPipelineConstructV2ArtifactBucketPolicy56C86D38"
+          }
+        ],
+        "/AsaRacingStack/AsaRacingNextJSPipelineConstructV2/ArtifactBucket/AutoDeleteObjectsCustomResource/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "AsaRacingNextJSPipelineConstructV2ArtifactBucketAutoDeleteObjectsCustomResource63D17777"
+          }
+        ],
+        "/AsaRacingStack/AsaRacingNextJSPipelineConstructV2/WebsiteBucket/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "AsaRacingNextJSPipelineConstructV2WebsiteBucket2BB4A401"
+          }
+        ],
+        "/AsaRacingStack/AsaRacingNextJSPipelineConstructV2/WebsiteBucket/Policy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "AsaRacingNextJSPipelineConstructV2WebsiteBucketPolicy92C507F2"
+          }
+        ],
+        "/AsaRacingStack/AsaRacingNextJSPipelineConstructV2/WebsiteBucket/AutoDeleteObjectsCustomResource/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "AsaRacingNextJSPipelineConstructV2WebsiteBucketAutoDeleteObjectsCustomResource575CF41F"
+          }
+        ],
+        "/AsaRacingStack/AsaRacingNextJSPipelineConstructV2/OAI/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "AsaRacingNextJSPipelineConstructV2OAIE2E05F79"
+          }
+        ],
+        "/AsaRacingStack/AsaRacingNextJSPipelineConstructV2/WebsiteDistribution/LoggingBucket/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "AsaRacingNextJSPipelineConstructV2WebsiteDistributionLoggingBucket9229E70A"
+          }
+        ],
+        "/AsaRacingStack/AsaRacingNextJSPipelineConstructV2/WebsiteDistribution/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "AsaRacingNextJSPipelineConstructV2WebsiteDistribution14D0C0DD"
+          }
+        ],
+        "/AsaRacingStack/AsaRacingNextJSPipelineConstructV2/BuildProject/Role/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "AsaRacingNextJSPipelineConstructV2BuildProjectRole0D9C7811"
+          }
+        ],
+        "/AsaRacingStack/AsaRacingNextJSPipelineConstructV2/BuildProject/Role/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "AsaRacingNextJSPipelineConstructV2BuildProjectRoleDefaultPolicy4D0CD251"
+          }
+        ],
+        "/AsaRacingStack/AsaRacingNextJSPipelineConstructV2/BuildProject/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "AsaRacingNextJSPipelineConstructV2BuildProjectD387B40A"
+          }
+        ],
+        "/AsaRacingStack/AsaRacingNextJSPipelineConstructV2/PipelineRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "AsaRacingNextJSPipelineConstructV2PipelineRoleA2F61DBC"
+          }
+        ],
+        "/AsaRacingStack/AsaRacingNextJSPipelineConstructV2/PipelineRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "AsaRacingNextJSPipelineConstructV2PipelineRoleDefaultPolicy73C3FD5E"
+          }
+        ],
+        "/AsaRacingStack/AsaRacingNextJSPipelineConstructV2/Pipeline": [
+          {
+            "type": "aws:cdk:warning",
+            "data": "V1 pipeline type is implicitly selected when `pipelineType` is not set. If you want to use V2 type, set `PipelineType.V2`. [ack: @aws-cdk/aws-codepipeline:unspecifiedPipelineType]",
+            "trace": [
+              "Annotations.addMessage (/Users/matthewzienert/Documents/asa-racing/asa-racing-core/node_modules/aws-cdk-lib/core/lib/annotations.js:1:1608)",
+              "Annotations.addWarningV2 (/Users/matthewzienert/Documents/asa-racing/asa-racing-core/node_modules/aws-cdk-lib/core/lib/annotations.js:1:825)",
+              "new Pipeline (/Users/matthewzienert/Documents/asa-racing/asa-racing-core/node_modules/aws-cdk-lib/aws-codepipeline/lib/pipeline.js:1:6677)",
+              "new asaRacingUIPipelineConstruct (/Users/matthewzienert/Documents/asa-racing/asa-racing-core/lib/constructs/pipeline/asa-racing-pipeline-construct.ts:172:21)",
+              "new AsaRacingStack (/Users/matthewzienert/Documents/asa-racing/asa-racing-core/lib/asa-racing-stack.ts:68:37)",
+              "Object.<anonymous> (/Users/matthewzienert/Documents/asa-racing/asa-racing-core/bin/asa-racing.ts:39:3)",
+              "Module._compile (node:internal/modules/cjs/loader:1562:14)",
+              "Module.m._compile (/Users/matthewzienert/Documents/asa-racing/asa-racing-core/node_modules/ts-node/src/index.ts:1618:23)",
+              "node:internal/modules/cjs/loader:1699:10",
+              "Object.require.extensions.<computed> [as .ts] (/Users/matthewzienert/Documents/asa-racing/asa-racing-core/node_modules/ts-node/src/index.ts:1621:12)",
+              "Module.load (node:internal/modules/cjs/loader:1313:32)",
+              "Function._load (node:internal/modules/cjs/loader:1123:12)",
+              "TracingChannel.traceSync (node:diagnostics_channel:322:14)",
+              "wrapModuleLoad (node:internal/modules/cjs/loader:217:24)",
+              "Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:170:5)",
+              "phase4 (/Users/matthewzienert/Documents/asa-racing/asa-racing-core/node_modules/ts-node/src/bin.ts:649:14)",
+              "bootstrap (/Users/matthewzienert/Documents/asa-racing/asa-racing-core/node_modules/ts-node/src/bin.ts:95:10)",
+              "main (/Users/matthewzienert/Documents/asa-racing/asa-racing-core/node_modules/ts-node/src/bin.ts:55:10)",
+              "Object.<anonymous> (/Users/matthewzienert/Documents/asa-racing/asa-racing-core/node_modules/ts-node/src/bin.ts:800:3)",
+              "Module._compile (node:internal/modules/cjs/loader:1562:14)",
+              "Object.<anonymous> (node:internal/modules/cjs/loader:1699:10)",
+              "Module.load (node:internal/modules/cjs/loader:1313:32)",
+              "Function._load (node:internal/modules/cjs/loader:1123:12)",
+              "TracingChannel.traceSync (node:diagnostics_channel:322:14)",
+              "wrapModuleLoad (node:internal/modules/cjs/loader:217:24)",
+              "Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:170:5)",
+              "node:internal/main/run_main_module:36:49"
+            ]
+          }
+        ],
+        "/AsaRacingStack/AsaRacingNextJSPipelineConstructV2/Pipeline/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "AsaRacingNextJSPipelineConstructV2Pipeline383ACCBF"
+          }
+        ],
+        "/AsaRacingStack/AsaRacingNextJSPipelineConstructV2/Pipeline/Source/GitHub_Source/WebhookResource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "AsaRacingNextJSPipelineConstructV2PipelineSourceGitHubSourceWebhookResourceAE5EDC38"
+          }
+        ],
+        "/AsaRacingStack/AsaRacingNextJSPipelineConstructV2/Pipeline/Build/Build/CodePipelineActionRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "AsaRacingNextJSPipelineConstructV2PipelineBuildCodePipelineActionRole0A3EB494"
+          }
+        ],
+        "/AsaRacingStack/AsaRacingNextJSPipelineConstructV2/Pipeline/Build/Build/CodePipelineActionRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "AsaRacingNextJSPipelineConstructV2PipelineBuildCodePipelineActionRoleDefaultPolicy9392CA9F"
+          }
+        ],
+        "/AsaRacingStack/ARecord/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ARecordE7B57761"
+          }
+        ],
+        "/AsaRacingStack/AWSCloudFrontPartitionHostedZoneIdMap": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "AWSCloudFrontPartitionHostedZoneIdMap"
+          }
+        ],
+        "/AsaRacingStack/WWWARecord/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "WWWARecord1A0BFA03"
+          }
+        ],
+        "/AsaRacingStack/HostedZoneId": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HostedZoneId"
+          }
+        ],
+        "/AsaRacingStack/DefineAuthChallenge/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "DefineAuthChallengeServiceRole1D83696B"
+          }
+        ],
+        "/AsaRacingStack/DefineAuthChallenge/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "DefineAuthChallengeE7E3BC7B"
+          }
+        ],
+        "/AsaRacingStack/CreateAuthChallenge/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CreateAuthChallengeServiceRoleCE50EC04"
+          }
+        ],
+        "/AsaRacingStack/CreateAuthChallenge/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CreateAuthChallengeServiceRoleDefaultPolicy637265A4"
+          }
+        ],
+        "/AsaRacingStack/CreateAuthChallenge/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CreateAuthChallengeB2F8D873"
+          }
+        ],
+        "/AsaRacingStack/VerifyAuthChallenge/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "VerifyAuthChallengeServiceRole0AEAA465"
+          }
+        ],
+        "/AsaRacingStack/VerifyAuthChallenge/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "VerifyAuthChallenge610ED36B"
+          }
+        ],
+        "/AsaRacingStack/CognitoPool/CognitoPool/DefineAuthChallengeCognito": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CognitoPoolDefineAuthChallengeCognitoD50A066D"
+          }
+        ],
+        "/AsaRacingStack/CognitoPool/CognitoPool/CreateAuthChallengeCognito": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CognitoPoolCreateAuthChallengeCognitoB37B4515"
+          }
+        ],
+        "/AsaRacingStack/CognitoPool/CognitoPool/VerifyAuthChallengeResponseCognito": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CognitoPoolVerifyAuthChallengeResponseCognito480B7C15"
+          }
+        ],
+        "/AsaRacingStack/CognitoPool/CognitoPool/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CognitoPool9328EF5E"
+          }
+        ],
+        "/AsaRacingStack/CognitoPool/CognitoPool/MyAppClient/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CognitoPoolMyAppClient1CD10A1A"
+          }
+        ],
+        "/AsaRacingStack/ApiLambdas/auth-create-auth-challenge-Role/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ApiLambdasauthcreateauthchallengeRoleF037F15B"
+          }
+        ],
+        "/AsaRacingStack/ApiLambdas/auth-create-auth-challenge-Role/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ApiLambdasauthcreateauthchallengeRoleDefaultPolicy3885D950"
+          }
+        ],
+        "/AsaRacingStack/ApiLambdas/Lambda-auth-create-auth-challenge/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ApiLambdasLambdaauthcreateauthchallengeB9D8C488"
+          }
+        ],
+        "/AsaRacingStack/ApiLambdas/Lambda-auth-create-auth-challenge/LogRetention/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ApiLambdasLambdaauthcreateauthchallengeLogRetention9D77D282"
+          }
+        ],
+        "/AsaRacingStack/ApiLambdas/auth-define-auth-challenge-Role/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ApiLambdasauthdefineauthchallengeRole353EBA87"
+          }
+        ],
+        "/AsaRacingStack/ApiLambdas/auth-define-auth-challenge-Role/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ApiLambdasauthdefineauthchallengeRoleDefaultPolicy54E5CB65"
+          }
+        ],
+        "/AsaRacingStack/ApiLambdas/Lambda-auth-define-auth-challenge/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ApiLambdasLambdaauthdefineauthchallenge3852A3CE"
+          }
+        ],
+        "/AsaRacingStack/ApiLambdas/Lambda-auth-define-auth-challenge/LogRetention/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ApiLambdasLambdaauthdefineauthchallengeLogRetentionB0598B92"
+          }
+        ],
+        "/AsaRacingStack/ApiLambdas/auth-manage-session-Role/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ApiLambdasauthmanagesessionRole24DCACD3"
+          }
+        ],
+        "/AsaRacingStack/ApiLambdas/auth-manage-session-Role/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ApiLambdasauthmanagesessionRoleDefaultPolicyF5E396DA"
+          }
+        ],
+        "/AsaRacingStack/ApiLambdas/Lambda-auth-manage-session/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ApiLambdasLambdaauthmanagesessionA07F4853"
+          }
+        ],
+        "/AsaRacingStack/ApiLambdas/Lambda-auth-manage-session/LogRetention/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ApiLambdasLambdaauthmanagesessionLogRetentionAB1968A9"
+          }
+        ],
+        "/AsaRacingStack/ApiLambdas/auth-verify-auth-challenge-Role/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ApiLambdasauthverifyauthchallengeRoleBE7D1EB6"
+          }
+        ],
+        "/AsaRacingStack/ApiLambdas/auth-verify-auth-challenge-Role/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ApiLambdasauthverifyauthchallengeRoleDefaultPolicyA260FD5F"
+          }
+        ],
+        "/AsaRacingStack/ApiLambdas/Lambda-auth-verify-auth-challenge/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ApiLambdasLambdaauthverifyauthchallenge452EFF04"
+          }
+        ],
+        "/AsaRacingStack/ApiLambdas/Lambda-auth-verify-auth-challenge/LogRetention/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ApiLambdasLambdaauthverifyauthchallengeLogRetention6F915257"
+          }
+        ],
+        "/AsaRacingStack/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB"
+          }
+        ],
+        "/AsaRacingStack/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB"
+          }
+        ],
+        "/AsaRacingStack/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A"
+          }
+        ],
+        "/AsaRacingStack/AsaRacingApi/AsaRacingApi/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "AsaRacingApiE4FF1702"
+          }
+        ],
+        "/AsaRacingStack/AsaRacingApi/AsaRacingApi/CloudWatchRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "AsaRacingApiCloudWatchRole8FDE5915"
+          }
+        ],
+        "/AsaRacingStack/AsaRacingApi/AsaRacingApi/Account": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "AsaRacingApiAccount1583A578"
+          }
+        ],
+        "/AsaRacingStack/AsaRacingApi/AsaRacingApi/Deployment/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "AsaRacingApiDeployment66BD2311da53bd3c00cb518f3626b173586d90c2"
+          }
+        ],
+        "/AsaRacingStack/AsaRacingApi/AsaRacingApi/DeploymentStage.prod/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "AsaRacingApiDeploymentStageprod82E0A178"
+          }
+        ],
+        "/AsaRacingStack/AsaRacingApi/AsaRacingApi/Endpoint": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "AsaRacingApiEndpointFA9C9D72"
+          }
+        ],
+        "/AsaRacingStack/AsaRacingApi/AsaRacingApi/Default/OPTIONS/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "AsaRacingApiOPTIONS30B9C859"
+          }
+        ],
+        "/AsaRacingStack/AsaRacingApi/AsaRacingApi/Default/auth/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "AsaRacingApiauthC526314E"
+          }
+        ],
+        "/AsaRacingStack/AsaRacingApi/AsaRacingApi/Default/auth/OPTIONS/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "AsaRacingApiauthOPTIONSBF3239DF"
+          }
+        ],
+        "/AsaRacingStack/AsaRacingApi/AsaRacingApi/Default/auth/create-auth-challenge/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "AsaRacingApiauthcreateauthchallenge53345C0F"
+          }
+        ],
+        "/AsaRacingStack/AsaRacingApi/AsaRacingApi/Default/auth/create-auth-challenge/OPTIONS/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "AsaRacingApiauthcreateauthchallengeOPTIONS278AC799"
+          }
+        ],
+        "/AsaRacingStack/AsaRacingApi/AsaRacingApi/Default/auth/create-auth-challenge/GET/ApiPermission.AsaRacingStackAsaRacingApi56C117FC.GET..auth.create-auth-challenge": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "AsaRacingApiauthcreateauthchallengeGETApiPermissionAsaRacingStackAsaRacingApi56C117FCGETauthcreateauthchallenge4588909B"
+          }
+        ],
+        "/AsaRacingStack/AsaRacingApi/AsaRacingApi/Default/auth/create-auth-challenge/GET/ApiPermission.Test.AsaRacingStackAsaRacingApi56C117FC.GET..auth.create-auth-challenge": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "AsaRacingApiauthcreateauthchallengeGETApiPermissionTestAsaRacingStackAsaRacingApi56C117FCGETauthcreateauthchallenge45AF3EFF"
+          }
+        ],
+        "/AsaRacingStack/AsaRacingApi/AsaRacingApi/Default/auth/create-auth-challenge/GET/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "AsaRacingApiauthcreateauthchallengeGETB5F9FAC1"
+          }
+        ],
+        "/AsaRacingStack/AsaRacingApi/AsaRacingApi/Default/auth/define-auth-challenge/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "AsaRacingApiauthdefineauthchallenge68C7B6FE"
+          }
+        ],
+        "/AsaRacingStack/AsaRacingApi/AsaRacingApi/Default/auth/define-auth-challenge/OPTIONS/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "AsaRacingApiauthdefineauthchallengeOPTIONS8A625292"
+          }
+        ],
+        "/AsaRacingStack/AsaRacingApi/AsaRacingApi/Default/auth/define-auth-challenge/GET/ApiPermission.AsaRacingStackAsaRacingApi56C117FC.GET..auth.define-auth-challenge": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "AsaRacingApiauthdefineauthchallengeGETApiPermissionAsaRacingStackAsaRacingApi56C117FCGETauthdefineauthchallengeD17BBF22"
+          }
+        ],
+        "/AsaRacingStack/AsaRacingApi/AsaRacingApi/Default/auth/define-auth-challenge/GET/ApiPermission.Test.AsaRacingStackAsaRacingApi56C117FC.GET..auth.define-auth-challenge": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "AsaRacingApiauthdefineauthchallengeGETApiPermissionTestAsaRacingStackAsaRacingApi56C117FCGETauthdefineauthchallengeEF0D4735"
+          }
+        ],
+        "/AsaRacingStack/AsaRacingApi/AsaRacingApi/Default/auth/define-auth-challenge/GET/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "AsaRacingApiauthdefineauthchallengeGET5E5EF565"
+          }
+        ],
+        "/AsaRacingStack/AsaRacingApi/AsaRacingApi/Default/auth/manage-session/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "AsaRacingApiauthmanagesessionD889E8D9"
+          }
+        ],
+        "/AsaRacingStack/AsaRacingApi/AsaRacingApi/Default/auth/manage-session/OPTIONS/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "AsaRacingApiauthmanagesessionOPTIONSF74FA8F4"
+          }
+        ],
+        "/AsaRacingStack/AsaRacingApi/AsaRacingApi/Default/auth/manage-session/POST/ApiPermission.AsaRacingStackAsaRacingApi56C117FC.POST..auth.manage-session": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "AsaRacingApiauthmanagesessionPOSTApiPermissionAsaRacingStackAsaRacingApi56C117FCPOSTauthmanagesessionD9422FD4"
+          }
+        ],
+        "/AsaRacingStack/AsaRacingApi/AsaRacingApi/Default/auth/manage-session/POST/ApiPermission.Test.AsaRacingStackAsaRacingApi56C117FC.POST..auth.manage-session": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "AsaRacingApiauthmanagesessionPOSTApiPermissionTestAsaRacingStackAsaRacingApi56C117FCPOSTauthmanagesession03307AD0"
+          }
+        ],
+        "/AsaRacingStack/AsaRacingApi/AsaRacingApi/Default/auth/manage-session/POST/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "AsaRacingApiauthmanagesessionPOSTD884EC75"
+          }
+        ],
+        "/AsaRacingStack/AsaRacingApi/AsaRacingApi/Default/auth/manage-session/verify/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "AsaRacingApiauthmanagesessionverifyF8F4996B"
+          }
+        ],
+        "/AsaRacingStack/AsaRacingApi/AsaRacingApi/Default/auth/manage-session/verify/OPTIONS/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "AsaRacingApiauthmanagesessionverifyOPTIONSE6DC184C"
+          }
+        ],
+        "/AsaRacingStack/AsaRacingApi/AsaRacingApi/Default/auth/manage-session/verify/GET/ApiPermission.AsaRacingStackAsaRacingApi56C117FC.GET..auth.manage-session.verify": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "AsaRacingApiauthmanagesessionverifyGETApiPermissionAsaRacingStackAsaRacingApi56C117FCGETauthmanagesessionverifyBAEB5FF9"
+          }
+        ],
+        "/AsaRacingStack/AsaRacingApi/AsaRacingApi/Default/auth/manage-session/verify/GET/ApiPermission.Test.AsaRacingStackAsaRacingApi56C117FC.GET..auth.manage-session.verify": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "AsaRacingApiauthmanagesessionverifyGETApiPermissionTestAsaRacingStackAsaRacingApi56C117FCGETauthmanagesessionverify3CCE1105"
+          }
+        ],
+        "/AsaRacingStack/AsaRacingApi/AsaRacingApi/Default/auth/manage-session/verify/GET/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "AsaRacingApiauthmanagesessionverifyGET4DBEF15D"
+          }
+        ],
+        "/AsaRacingStack/AsaRacingApi/AsaRacingApi/Default/auth/verify-auth-challenge/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "AsaRacingApiauthverifyauthchallengeC5656351"
+          }
+        ],
+        "/AsaRacingStack/AsaRacingApi/AsaRacingApi/Default/auth/verify-auth-challenge/OPTIONS/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "AsaRacingApiauthverifyauthchallengeOPTIONS7E47379E"
+          }
+        ],
+        "/AsaRacingStack/AsaRacingApi/AsaRacingApi/Default/auth/verify-auth-challenge/GET/ApiPermission.AsaRacingStackAsaRacingApi56C117FC.GET..auth.verify-auth-challenge": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "AsaRacingApiauthverifyauthchallengeGETApiPermissionAsaRacingStackAsaRacingApi56C117FCGETauthverifyauthchallenge7CF2B173"
+          }
+        ],
+        "/AsaRacingStack/AsaRacingApi/AsaRacingApi/Default/auth/verify-auth-challenge/GET/ApiPermission.Test.AsaRacingStackAsaRacingApi56C117FC.GET..auth.verify-auth-challenge": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "AsaRacingApiauthverifyauthchallengeGETApiPermissionTestAsaRacingStackAsaRacingApi56C117FCGETauthverifyauthchallenge4ED7470D"
+          }
+        ],
+        "/AsaRacingStack/AsaRacingApi/AsaRacingApi/Default/auth/verify-auth-challenge/GET/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "AsaRacingApiauthverifyauthchallengeGET848B73B5"
+          }
+        ],
+        "/AsaRacingStack/DynamoDBTableName": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "DynamoDBTableName"
+          }
+        ],
+        "/AsaRacingStack/asaRacingBucketName": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "asaRacingBucketName"
+          }
+        ],
+        "/AsaRacingStack/NextJSWebsiteURL": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "NextJSWebsiteURL"
+          }
+        ],
+        "/AsaRacingStack/NextJSPipelineArn": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "NextJSPipelineArn"
+          }
+        ],
+        "/AsaRacingStack/CognitoUserPoolId": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CognitoUserPoolId"
+          }
+        ],
+        "/AsaRacingStack/CognitoClientId": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CognitoClientId"
+          }
+        ],
+        "/AsaRacingStack/ApiGatewayUrl": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ApiGatewayUrl"
+          }
+        ],
+        "/AsaRacingStack/AsaRacingDomain/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "AsaRacingDomain406518F7"
+          }
+        ],
+        "/AsaRacingStack/DkimRecord0/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "DkimRecord07BE77F4F"
+          }
+        ],
+        "/AsaRacingStack/DkimRecord1/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "DkimRecord106FDF84B"
+          }
+        ],
+        "/AsaRacingStack/DkimRecord2/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "DkimRecord2C41042AD"
+          }
+        ],
+        "/AsaRacingStack/SesVerificationRecord/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SesVerificationRecord0152607B"
+          }
+        ],
+        "/AsaRacingStack/SesMailFromMx/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SesMailFromMx673564D3"
+          }
+        ],
+        "/AsaRacingStack/SesMailFromSpf/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SesMailFromSpfD2269C5A"
+          }
+        ],
+        "/AsaRacingStack/CDKMetadata/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CDKMetadata"
+          }
+        ],
+        "/AsaRacingStack/BootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BootstrapVersion"
+          }
+        ],
+        "/AsaRacingStack/CheckBootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CheckBootstrapVersion"
+          }
+        ]
+      },
+      "displayName": "AsaRacingStack"
+    },
+    "Tree": {
+      "type": "cdk:tree",
+      "properties": {
+        "file": "tree.json"
+      }
+    }
+  }
+}

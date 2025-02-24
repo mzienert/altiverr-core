@@ -1,0 +1,4168 @@
+{
+ "Resources": {
+  "S3ConstructasaRacingAPIBucketCDB90C88": {
+   "Type": "AWS::S3::Bucket",
+   "Properties": {
+    "AccessControl": "Private",
+    "BucketEncryption": {
+     "ServerSideEncryptionConfiguration": [
+      {
+       "ServerSideEncryptionByDefault": {
+        "SSEAlgorithm": "AES256"
+       }
+      }
+     ]
+    },
+    "PublicAccessBlockConfiguration": {
+     "BlockPublicAcls": true,
+     "BlockPublicPolicy": true,
+     "IgnorePublicAcls": true,
+     "RestrictPublicBuckets": true
+    },
+    "Tags": [
+     {
+      "Key": "aws-cdk:auto-delete-objects",
+      "Value": "true"
+     }
+    ],
+    "VersioningConfiguration": {
+     "Status": "Enabled"
+    }
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "AsaRacingStack/S3Construct/asaRacingAPIBucket/Resource"
+   }
+  },
+  "S3ConstructasaRacingAPIBucketPolicyD2D01430": {
+   "Type": "AWS::S3::BucketPolicy",
+   "Properties": {
+    "Bucket": {
+     "Ref": "S3ConstructasaRacingAPIBucketCDB90C88"
+    },
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "s3:PutBucketPolicy",
+        "s3:GetBucket*",
+        "s3:List*",
+        "s3:DeleteObject*"
+       ],
+       "Effect": "Allow",
+       "Principal": {
+        "AWS": {
+         "Fn::GetAtt": [
+          "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092",
+          "Arn"
+         ]
+        }
+       },
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "S3ConstructasaRacingAPIBucketCDB90C88",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "S3ConstructasaRacingAPIBucketCDB90C88",
+             "Arn"
+            ]
+           },
+           "/*"
+          ]
+         ]
+        }
+       ]
+      }
+     ],
+     "Version": "2012-10-17"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "AsaRacingStack/S3Construct/asaRacingAPIBucket/Policy/Resource"
+   }
+  },
+  "S3ConstructasaRacingAPIBucketAutoDeleteObjectsCustomResourceA70B874B": {
+   "Type": "Custom::S3AutoDeleteObjects",
+   "Properties": {
+    "ServiceToken": {
+     "Fn::GetAtt": [
+      "CustomS3AutoDeleteObjectsCustomResourceProviderHandler9D90184F",
+      "Arn"
+     ]
+    },
+    "BucketName": {
+     "Ref": "S3ConstructasaRacingAPIBucketCDB90C88"
+    }
+   },
+   "DependsOn": [
+    "S3ConstructasaRacingAPIBucketPolicyD2D01430"
+   ],
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "AsaRacingStack/S3Construct/asaRacingAPIBucket/AutoDeleteObjectsCustomResource/Default"
+   }
+  },
+  "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Version": "2012-10-17",
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ]
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Sub": "arn:${AWS::Partition}:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "AsaRacingStack/Custom::S3AutoDeleteObjectsCustomResourceProvider/Role"
+   }
+  },
+  "CustomS3AutoDeleteObjectsCustomResourceProviderHandler9D90184F": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": "cdk-hnb659fds-assets-619326977873-us-west-1",
+     "S3Key": "faa95a81ae7d7373f3e1f242268f904eb748d8d0fdd306e8a6fe515a1905a7d6.zip"
+    },
+    "Timeout": 900,
+    "MemorySize": 128,
+    "Handler": "index.handler",
+    "Role": {
+     "Fn::GetAtt": [
+      "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs20.x",
+    "Description": {
+     "Fn::Join": [
+      "",
+      [
+       "Lambda function for auto-deleting objects in ",
+       {
+        "Ref": "S3ConstructasaRacingAPIBucketCDB90C88"
+       },
+       " S3 bucket."
+      ]
+     ]
+    }
+   },
+   "DependsOn": [
+    "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "AsaRacingStack/Custom::S3AutoDeleteObjectsCustomResourceProvider/Handler",
+    "aws:asset:path": "asset.faa95a81ae7d7373f3e1f242268f904eb748d8d0fdd306e8a6fe515a1905a7d6",
+    "aws:asset:property": "Code"
+   }
+  },
+  "KlineTable986A720B": {
+   "Type": "AWS::DynamoDB::Table",
+   "Properties": {
+    "AttributeDefinitions": [
+     {
+      "AttributeName": "pk",
+      "AttributeType": "S"
+     },
+     {
+      "AttributeName": "sk",
+      "AttributeType": "N"
+     },
+     {
+      "AttributeName": "exchange",
+      "AttributeType": "S"
+     },
+     {
+      "AttributeName": "timestamp",
+      "AttributeType": "N"
+     }
+    ],
+    "BillingMode": "PAY_PER_REQUEST",
+    "GlobalSecondaryIndexes": [
+     {
+      "IndexName": "exchange-timestamp-index",
+      "KeySchema": [
+       {
+        "AttributeName": "exchange",
+        "KeyType": "HASH"
+       },
+       {
+        "AttributeName": "timestamp",
+        "KeyType": "RANGE"
+       }
+      ],
+      "Projection": {
+       "ProjectionType": "ALL"
+      }
+     }
+    ],
+    "KeySchema": [
+     {
+      "AttributeName": "pk",
+      "KeyType": "HASH"
+     },
+     {
+      "AttributeName": "sk",
+      "KeyType": "RANGE"
+     }
+    ],
+    "StreamSpecification": {
+     "StreamViewType": "NEW_AND_OLD_IMAGES"
+    },
+    "TableName": "asaRacingTable"
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "AsaRacingStack/KlineTable/Table/Resource"
+   }
+  },
+  "IAMRolesBuildRoleD76DE982": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "codebuild.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/AWSCodeBuildAdminAccess"
+       ]
+      ]
+     },
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/AmazonS3FullAccess"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "AsaRacingStack/IAMRoles/BuildRole/Resource"
+   }
+  },
+  "IAMRolesBuildRoleDefaultPolicy33425913": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "s3:GetObject*",
+        "s3:GetBucket*",
+        "s3:List*",
+        "s3:DeleteObject*",
+        "s3:PutObject",
+        "s3:PutObjectLegalHold",
+        "s3:PutObjectRetention",
+        "s3:PutObjectTagging",
+        "s3:PutObjectVersionTagging",
+        "s3:Abort*"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "S3ConstructasaRacingAPIBucketCDB90C88",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "S3ConstructasaRacingAPIBucketCDB90C88",
+             "Arn"
+            ]
+           },
+           "/*"
+          ]
+         ]
+        }
+       ]
+      },
+      {
+       "Action": [
+        "logs:CreateLogGroup",
+        "logs:CreateLogStream",
+        "logs:PutLogEvents",
+        "logs:DescribeLogStreams",
+        "logs:DescribeLogGroups"
+       ],
+       "Effect": "Allow",
+       "Resource": "arn:aws:logs:us-west-1:619326977873:log-group:*"
+      },
+      {
+       "Action": "*",
+       "Condition": {
+        "Bool": {
+         "aws:SecureTransport": false
+        }
+       },
+       "Effect": "Deny",
+       "Resource": "*"
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "IAMRolesBuildRoleDefaultPolicy33425913",
+    "Roles": [
+     {
+      "Ref": "IAMRolesBuildRoleD76DE982"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "AsaRacingStack/IAMRoles/BuildRole/DefaultPolicy/Resource"
+   }
+  },
+  "IAMRolesCodeDeployServiceRole5E16DA96": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "codedeploy.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSCodeDeployRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "AsaRacingStack/IAMRoles/CodeDeployServiceRole/Resource"
+   }
+  },
+  "IAMRolesCodeDeployServiceRoleDefaultPolicy98C02197": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "logs:CreateLogGroup",
+        "logs:CreateLogStream",
+        "logs:PutLogEvents",
+        "logs:DescribeLogStreams",
+        "logs:DescribeLogGroups"
+       ],
+       "Effect": "Allow",
+       "Resource": "arn:aws:logs:us-west-1:619326977873:log-group:*"
+      },
+      {
+       "Action": "*",
+       "Condition": {
+        "Bool": {
+         "aws:SecureTransport": false
+        }
+       },
+       "Effect": "Deny",
+       "Resource": "*"
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "IAMRolesCodeDeployServiceRoleDefaultPolicy98C02197",
+    "Roles": [
+     {
+      "Ref": "IAMRolesCodeDeployServiceRole5E16DA96"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "AsaRacingStack/IAMRoles/CodeDeployServiceRole/DefaultPolicy/Resource"
+   }
+  },
+  "IAMRolesLambdaRole3969EFC6": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "Description": "Role for ASA Racing Lambda functions"
+   },
+   "Metadata": {
+    "aws:cdk:path": "AsaRacingStack/IAMRoles/LambdaRole/Resource"
+   }
+  },
+  "IAMRolesLambdaRoleDefaultPolicy833CF6E2": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "logs:CreateLogGroup",
+        "logs:CreateLogStream",
+        "logs:PutLogEvents"
+       ],
+       "Effect": "Allow",
+       "Resource": "*"
+      },
+      {
+       "Action": [
+        "dynamodb:GetItem",
+        "dynamodb:PutItem",
+        "dynamodb:UpdateItem",
+        "dynamodb:DeleteItem",
+        "dynamodb:Query",
+        "dynamodb:Scan"
+       ],
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::GetAtt": [
+         "KlineTable986A720B",
+         "Arn"
+        ]
+       }
+      },
+      {
+       "Action": [
+        "ses:SendEmail",
+        "ses:SendRawEmail"
+       ],
+       "Effect": "Allow",
+       "Resource": "arn:aws:ses:us-west-1:619326977873:identity/*"
+      },
+      {
+       "Action": [
+        "cognito-idp:AdminCreateUser",
+        "cognito-idp:AdminSetUserPassword",
+        "cognito-idp:AdminUpdateUserAttributes",
+        "cognito-idp:AdminInitiateAuth",
+        "cognito-idp:AdminRespondToAuthChallenge"
+       ],
+       "Effect": "Allow",
+       "Resource": "arn:aws:cognito-idp:us-west-1:619326977873:userpool/*"
+      },
+      {
+       "Action": [
+        "ses:SendEmail",
+        "ses:SendRawEmail"
+       ],
+       "Effect": "Allow",
+       "Resource": "*"
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "IAMRolesLambdaRoleDefaultPolicy833CF6E2",
+    "Roles": [
+     {
+      "Ref": "IAMRolesLambdaRole3969EFC6"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "AsaRacingStack/IAMRoles/LambdaRole/DefaultPolicy/Resource"
+   }
+  },
+  "AsaRacingNextJSPipelineConstructV2ArtifactBucket3CBADDEE": {
+   "Type": "AWS::S3::Bucket",
+   "Properties": {
+    "BucketEncryption": {
+     "ServerSideEncryptionConfiguration": [
+      {
+       "ServerSideEncryptionByDefault": {
+        "SSEAlgorithm": "AES256"
+       }
+      }
+     ]
+    },
+    "Tags": [
+     {
+      "Key": "aws-cdk:auto-delete-objects",
+      "Value": "true"
+     }
+    ]
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "AsaRacingStack/AsaRacingNextJSPipelineConstructV2/ArtifactBucket/Resource"
+   }
+  },
+  "AsaRacingNextJSPipelineConstructV2ArtifactBucketPolicy56C86D38": {
+   "Type": "AWS::S3::BucketPolicy",
+   "Properties": {
+    "Bucket": {
+     "Ref": "AsaRacingNextJSPipelineConstructV2ArtifactBucket3CBADDEE"
+    },
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "s3:PutBucketPolicy",
+        "s3:GetBucket*",
+        "s3:List*",
+        "s3:DeleteObject*"
+       ],
+       "Effect": "Allow",
+       "Principal": {
+        "AWS": {
+         "Fn::GetAtt": [
+          "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092",
+          "Arn"
+         ]
+        }
+       },
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "AsaRacingNextJSPipelineConstructV2ArtifactBucket3CBADDEE",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "AsaRacingNextJSPipelineConstructV2ArtifactBucket3CBADDEE",
+             "Arn"
+            ]
+           },
+           "/*"
+          ]
+         ]
+        }
+       ]
+      }
+     ],
+     "Version": "2012-10-17"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "AsaRacingStack/AsaRacingNextJSPipelineConstructV2/ArtifactBucket/Policy/Resource"
+   }
+  },
+  "AsaRacingNextJSPipelineConstructV2ArtifactBucketAutoDeleteObjectsCustomResource63D17777": {
+   "Type": "Custom::S3AutoDeleteObjects",
+   "Properties": {
+    "ServiceToken": {
+     "Fn::GetAtt": [
+      "CustomS3AutoDeleteObjectsCustomResourceProviderHandler9D90184F",
+      "Arn"
+     ]
+    },
+    "BucketName": {
+     "Ref": "AsaRacingNextJSPipelineConstructV2ArtifactBucket3CBADDEE"
+    }
+   },
+   "DependsOn": [
+    "AsaRacingNextJSPipelineConstructV2ArtifactBucketPolicy56C86D38"
+   ],
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "AsaRacingStack/AsaRacingNextJSPipelineConstructV2/ArtifactBucket/AutoDeleteObjectsCustomResource/Default"
+   }
+  },
+  "AsaRacingNextJSPipelineConstructV2WebsiteBucket2BB4A401": {
+   "Type": "AWS::S3::Bucket",
+   "Properties": {
+    "BucketEncryption": {
+     "ServerSideEncryptionConfiguration": [
+      {
+       "ServerSideEncryptionByDefault": {
+        "SSEAlgorithm": "AES256"
+       }
+      }
+     ]
+    },
+    "OwnershipControls": {
+     "Rules": [
+      {
+       "ObjectOwnership": "BucketOwnerEnforced"
+      }
+     ]
+    },
+    "PublicAccessBlockConfiguration": {
+     "BlockPublicAcls": true,
+     "BlockPublicPolicy": true,
+     "IgnorePublicAcls": true,
+     "RestrictPublicBuckets": true
+    },
+    "Tags": [
+     {
+      "Key": "aws-cdk:auto-delete-objects",
+      "Value": "true"
+     }
+    ],
+    "VersioningConfiguration": {
+     "Status": "Enabled"
+    }
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "AsaRacingStack/AsaRacingNextJSPipelineConstructV2/WebsiteBucket/Resource"
+   }
+  },
+  "AsaRacingNextJSPipelineConstructV2WebsiteBucketPolicy92C507F2": {
+   "Type": "AWS::S3::BucketPolicy",
+   "Properties": {
+    "Bucket": {
+     "Ref": "AsaRacingNextJSPipelineConstructV2WebsiteBucket2BB4A401"
+    },
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": "s3:*",
+       "Condition": {
+        "Bool": {
+         "aws:SecureTransport": "false"
+        }
+       },
+       "Effect": "Deny",
+       "Principal": {
+        "AWS": "*"
+       },
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "AsaRacingNextJSPipelineConstructV2WebsiteBucket2BB4A401",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "AsaRacingNextJSPipelineConstructV2WebsiteBucket2BB4A401",
+             "Arn"
+            ]
+           },
+           "/*"
+          ]
+         ]
+        }
+       ]
+      },
+      {
+       "Action": [
+        "s3:PutBucketPolicy",
+        "s3:GetBucket*",
+        "s3:List*",
+        "s3:DeleteObject*"
+       ],
+       "Effect": "Allow",
+       "Principal": {
+        "AWS": {
+         "Fn::GetAtt": [
+          "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092",
+          "Arn"
+         ]
+        }
+       },
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "AsaRacingNextJSPipelineConstructV2WebsiteBucket2BB4A401",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "AsaRacingNextJSPipelineConstructV2WebsiteBucket2BB4A401",
+             "Arn"
+            ]
+           },
+           "/*"
+          ]
+         ]
+        }
+       ]
+      },
+      {
+       "Action": "s3:GetObject",
+       "Effect": "Allow",
+       "Principal": {
+        "CanonicalUser": {
+         "Fn::GetAtt": [
+          "AsaRacingNextJSPipelineConstructV2OAIE2E05F79",
+          "S3CanonicalUserId"
+         ]
+        }
+       },
+       "Resource": {
+        "Fn::Join": [
+         "",
+         [
+          {
+           "Fn::GetAtt": [
+            "AsaRacingNextJSPipelineConstructV2WebsiteBucket2BB4A401",
+            "Arn"
+           ]
+          },
+          "/*"
+         ]
+        ]
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "AsaRacingStack/AsaRacingNextJSPipelineConstructV2/WebsiteBucket/Policy/Resource"
+   }
+  },
+  "AsaRacingNextJSPipelineConstructV2WebsiteBucketAutoDeleteObjectsCustomResource575CF41F": {
+   "Type": "Custom::S3AutoDeleteObjects",
+   "Properties": {
+    "ServiceToken": {
+     "Fn::GetAtt": [
+      "CustomS3AutoDeleteObjectsCustomResourceProviderHandler9D90184F",
+      "Arn"
+     ]
+    },
+    "BucketName": {
+     "Ref": "AsaRacingNextJSPipelineConstructV2WebsiteBucket2BB4A401"
+    }
+   },
+   "DependsOn": [
+    "AsaRacingNextJSPipelineConstructV2WebsiteBucketPolicy92C507F2"
+   ],
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "AsaRacingStack/AsaRacingNextJSPipelineConstructV2/WebsiteBucket/AutoDeleteObjectsCustomResource/Default"
+   }
+  },
+  "AsaRacingNextJSPipelineConstructV2OAIE2E05F79": {
+   "Type": "AWS::CloudFront::CloudFrontOriginAccessIdentity",
+   "Properties": {
+    "CloudFrontOriginAccessIdentityConfig": {
+     "Comment": "OAI for asaracing.live"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "AsaRacingStack/AsaRacingNextJSPipelineConstructV2/OAI/Resource"
+   }
+  },
+  "AsaRacingNextJSPipelineConstructV2WebsiteDistributionLoggingBucket9229E70A": {
+   "Type": "AWS::S3::Bucket",
+   "Properties": {
+    "BucketEncryption": {
+     "ServerSideEncryptionConfiguration": [
+      {
+       "ServerSideEncryptionByDefault": {
+        "SSEAlgorithm": "AES256"
+       }
+      }
+     ]
+    },
+    "OwnershipControls": {
+     "Rules": [
+      {
+       "ObjectOwnership": "ObjectWriter"
+      }
+     ]
+    }
+   },
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain",
+   "Metadata": {
+    "aws:cdk:path": "AsaRacingStack/AsaRacingNextJSPipelineConstructV2/WebsiteDistribution/LoggingBucket/Resource"
+   }
+  },
+  "AsaRacingNextJSPipelineConstructV2WebsiteDistribution14D0C0DD": {
+   "Type": "AWS::CloudFront::Distribution",
+   "Properties": {
+    "DistributionConfig": {
+     "Aliases": [
+      "asaracing.live",
+      "www.asaracing.live"
+     ],
+     "CustomErrorResponses": [
+      {
+       "ErrorCachingMinTTL": 0,
+       "ErrorCode": 403,
+       "ResponseCode": 200,
+       "ResponsePagePath": "/index.html"
+      },
+      {
+       "ErrorCachingMinTTL": 0,
+       "ErrorCode": 404,
+       "ResponseCode": 200,
+       "ResponsePagePath": "/index.html"
+      }
+     ],
+     "DefaultCacheBehavior": {
+      "CachePolicyId": "658327ea-f89d-4fab-a63d-7e88639e58f6",
+      "Compress": true,
+      "OriginRequestPolicyId": "88a5eaf4-2fd4-4709-b370-b4c650ea3fcf",
+      "TargetOriginId": "AsaRacingStackAsaRacingNextJSPipelineConstructV2WebsiteDistributionOrigin1A33B82A2",
+      "ViewerProtocolPolicy": "redirect-to-https"
+     },
+     "DefaultRootObject": "index.html",
+     "Enabled": true,
+     "HttpVersion": "http2",
+     "IPV6Enabled": true,
+     "Logging": {
+      "Bucket": {
+       "Fn::GetAtt": [
+        "AsaRacingNextJSPipelineConstructV2WebsiteDistributionLoggingBucket9229E70A",
+        "RegionalDomainName"
+       ]
+      }
+     },
+     "Origins": [
+      {
+       "DomainName": {
+        "Fn::GetAtt": [
+         "AsaRacingNextJSPipelineConstructV2WebsiteBucket2BB4A401",
+         "RegionalDomainName"
+        ]
+       },
+       "Id": "AsaRacingStackAsaRacingNextJSPipelineConstructV2WebsiteDistributionOrigin1A33B82A2",
+       "S3OriginConfig": {
+        "OriginAccessIdentity": {
+         "Fn::Join": [
+          "",
+          [
+           "origin-access-identity/cloudfront/",
+           {
+            "Ref": "AsaRacingNextJSPipelineConstructV2OAIE2E05F79"
+           }
+          ]
+         ]
+        }
+       }
+      }
+     ],
+     "ViewerCertificate": {
+      "AcmCertificateArn": "arn:aws:acm:us-east-1:619326977873:certificate/8a0ae5ae-7a92-4c22-a236-877c03d78559",
+      "MinimumProtocolVersion": "TLSv1.2_2021",
+      "SslSupportMethod": "sni-only"
+     }
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "AsaRacingStack/AsaRacingNextJSPipelineConstructV2/WebsiteDistribution/Resource"
+   }
+  },
+  "AsaRacingNextJSPipelineConstructV2BuildProjectRole0D9C7811": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "codebuild.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "AsaRacingStack/AsaRacingNextJSPipelineConstructV2/BuildProject/Role/Resource"
+   }
+  },
+  "AsaRacingNextJSPipelineConstructV2BuildProjectRoleDefaultPolicy4D0CD251": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "logs:CreateLogGroup",
+        "logs:CreateLogStream",
+        "logs:PutLogEvents"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::Join": [
+          "",
+          [
+           "arn:",
+           {
+            "Ref": "AWS::Partition"
+           },
+           ":logs:us-west-1:619326977873:log-group:/aws/codebuild/",
+           {
+            "Ref": "AsaRacingNextJSPipelineConstructV2BuildProjectD387B40A"
+           }
+          ]
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           "arn:",
+           {
+            "Ref": "AWS::Partition"
+           },
+           ":logs:us-west-1:619326977873:log-group:/aws/codebuild/",
+           {
+            "Ref": "AsaRacingNextJSPipelineConstructV2BuildProjectD387B40A"
+           },
+           ":*"
+          ]
+         ]
+        }
+       ]
+      },
+      {
+       "Action": [
+        "codebuild:CreateReportGroup",
+        "codebuild:CreateReport",
+        "codebuild:UpdateReport",
+        "codebuild:BatchPutTestCases",
+        "codebuild:BatchPutCodeCoverages"
+       ],
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::Join": [
+         "",
+         [
+          "arn:",
+          {
+           "Ref": "AWS::Partition"
+          },
+          ":codebuild:us-west-1:619326977873:report-group/",
+          {
+           "Ref": "AsaRacingNextJSPipelineConstructV2BuildProjectD387B40A"
+          },
+          "-*"
+         ]
+        ]
+       }
+      },
+      {
+       "Action": [
+        "s3:GetObject*",
+        "s3:GetBucket*",
+        "s3:List*",
+        "s3:DeleteObject*",
+        "s3:PutObject",
+        "s3:PutObjectLegalHold",
+        "s3:PutObjectRetention",
+        "s3:PutObjectTagging",
+        "s3:PutObjectVersionTagging",
+        "s3:Abort*"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "AsaRacingNextJSPipelineConstructV2WebsiteBucket2BB4A401",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "AsaRacingNextJSPipelineConstructV2WebsiteBucket2BB4A401",
+             "Arn"
+            ]
+           },
+           "/*"
+          ]
+         ]
+        }
+       ]
+      },
+      {
+       "Action": "cloudfront:CreateInvalidation",
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::Join": [
+         "",
+         [
+          "arn:",
+          {
+           "Ref": "AWS::Partition"
+          },
+          ":cloudfront::619326977873:distribution/",
+          {
+           "Ref": "AsaRacingNextJSPipelineConstructV2WebsiteDistribution14D0C0DD"
+          }
+         ]
+        ]
+       }
+      },
+      {
+       "Action": [
+        "s3:GetObject*",
+        "s3:GetBucket*",
+        "s3:List*",
+        "s3:DeleteObject*",
+        "s3:PutObject",
+        "s3:PutObjectLegalHold",
+        "s3:PutObjectRetention",
+        "s3:PutObjectTagging",
+        "s3:PutObjectVersionTagging",
+        "s3:Abort*"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "AsaRacingNextJSPipelineConstructV2ArtifactBucket3CBADDEE",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "AsaRacingNextJSPipelineConstructV2ArtifactBucket3CBADDEE",
+             "Arn"
+            ]
+           },
+           "/*"
+          ]
+         ]
+        }
+       ]
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "AsaRacingNextJSPipelineConstructV2BuildProjectRoleDefaultPolicy4D0CD251",
+    "Roles": [
+     {
+      "Ref": "AsaRacingNextJSPipelineConstructV2BuildProjectRole0D9C7811"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "AsaRacingStack/AsaRacingNextJSPipelineConstructV2/BuildProject/Role/DefaultPolicy/Resource"
+   }
+  },
+  "AsaRacingNextJSPipelineConstructV2BuildProjectD387B40A": {
+   "Type": "AWS::CodeBuild::Project",
+   "Properties": {
+    "Artifacts": {
+     "Type": "CODEPIPELINE"
+    },
+    "Cache": {
+     "Type": "NO_CACHE"
+    },
+    "EncryptionKey": "alias/aws/s3",
+    "Environment": {
+     "ComputeType": "BUILD_GENERAL1_SMALL",
+     "EnvironmentVariables": [
+      {
+       "Name": "WEBSITE_BUCKET_NAME",
+       "Type": "PLAINTEXT",
+       "Value": {
+        "Ref": "AsaRacingNextJSPipelineConstructV2WebsiteBucket2BB4A401"
+       }
+      },
+      {
+       "Name": "DISTRIBUTION_ID",
+       "Type": "PLAINTEXT",
+       "Value": {
+        "Ref": "AsaRacingNextJSPipelineConstructV2WebsiteDistribution14D0C0DD"
+       }
+      },
+      {
+       "Name": "NEXT_PUBLIC_COGNITO_USER_POOL_ID",
+       "Type": "PLAINTEXT",
+       "Value": {
+        "Fn::ImportValue": "CognitoUserPoolId"
+       }
+      },
+      {
+       "Name": "NEXT_PUBLIC_COGNITO_CLIENT_ID",
+       "Type": "PLAINTEXT",
+       "Value": {
+        "Fn::ImportValue": "CognitoClientId"
+       }
+      },
+      {
+       "Name": "NEXT_PUBLIC_STAGE",
+       "Type": "PLAINTEXT",
+       "Value": "prod"
+      }
+     ],
+     "Image": "aws/codebuild/standard:7.0",
+     "ImagePullCredentialsType": "CODEBUILD",
+     "PrivilegedMode": true,
+     "Type": "LINUX_CONTAINER"
+    },
+    "ServiceRole": {
+     "Fn::GetAtt": [
+      "AsaRacingNextJSPipelineConstructV2BuildProjectRole0D9C7811",
+      "Arn"
+     ]
+    },
+    "Source": {
+     "BuildSpec": "{\n  \"version\": \"0.2\",\n  \"phases\": {\n    \"pre_build\": {\n      \"commands\": [\n        \"npm ci\"\n      ]\n    },\n    \"build\": {\n      \"commands\": [\n        \"npm run build\",\n        \"echo \\\"Build output directory contents:\\\"\",\n        \"ls -la out\",\n        \"echo \\\"Checking for index.html:\\\"\",\n        \"ls -la out/index.html || echo \\\"index.html not found!\\\"\"\n      ]\n    },\n    \"post_build\": {\n      \"commands\": [\n        \"aws s3 sync out/ s3://${WEBSITE_BUCKET_NAME} --delete\",\n        \"echo \\\"Verifying index.html in S3:\\\"\",\n        \"aws s3 ls s3://${WEBSITE_BUCKET_NAME}/index.html || echo \\\"index.html not found in S3!\\\"\",\n        \"aws cloudfront create-invalidation --distribution-id ${DISTRIBUTION_ID} --paths \\\"/*\\\"\",\n        \"echo \\\"Contents of S3 bucket:\\\"\",\n        \"aws s3 ls s3://${WEBSITE_BUCKET_NAME}/ --recursive\"\n      ]\n    }\n  },\n  \"artifacts\": {\n    \"base-directory\": \"out\",\n    \"files\": [\n      \"**/*\"\n    ]\n  }\n}",
+     "Type": "CODEPIPELINE"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "AsaRacingStack/AsaRacingNextJSPipelineConstructV2/BuildProject/Resource"
+   }
+  },
+  "AsaRacingNextJSPipelineConstructV2PipelineRoleA2F61DBC": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "codepipeline.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/AWSCodePipeline_FullAccess"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "AsaRacingStack/AsaRacingNextJSPipelineConstructV2/PipelineRole/Resource"
+   }
+  },
+  "AsaRacingNextJSPipelineConstructV2PipelineRoleDefaultPolicy73C3FD5E": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "s3:GetObject*",
+        "s3:GetBucket*",
+        "s3:List*",
+        "s3:DeleteObject*",
+        "s3:PutObject",
+        "s3:PutObjectLegalHold",
+        "s3:PutObjectRetention",
+        "s3:PutObjectTagging",
+        "s3:PutObjectVersionTagging",
+        "s3:Abort*"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "AsaRacingNextJSPipelineConstructV2ArtifactBucket3CBADDEE",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "AsaRacingNextJSPipelineConstructV2ArtifactBucket3CBADDEE",
+             "Arn"
+            ]
+           },
+           "/*"
+          ]
+         ]
+        }
+       ]
+      },
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::GetAtt": [
+         "AsaRacingNextJSPipelineConstructV2PipelineBuildCodePipelineActionRole0A3EB494",
+         "Arn"
+        ]
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "AsaRacingNextJSPipelineConstructV2PipelineRoleDefaultPolicy73C3FD5E",
+    "Roles": [
+     {
+      "Ref": "AsaRacingNextJSPipelineConstructV2PipelineRoleA2F61DBC"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "AsaRacingStack/AsaRacingNextJSPipelineConstructV2/PipelineRole/DefaultPolicy/Resource"
+   }
+  },
+  "AsaRacingNextJSPipelineConstructV2Pipeline383ACCBF": {
+   "Type": "AWS::CodePipeline::Pipeline",
+   "Properties": {
+    "ArtifactStore": {
+     "Location": {
+      "Ref": "AsaRacingNextJSPipelineConstructV2ArtifactBucket3CBADDEE"
+     },
+     "Type": "S3"
+    },
+    "RoleArn": {
+     "Fn::GetAtt": [
+      "AsaRacingNextJSPipelineConstructV2PipelineRoleA2F61DBC",
+      "Arn"
+     ]
+    },
+    "Stages": [
+     {
+      "Actions": [
+       {
+        "ActionTypeId": {
+         "Category": "Source",
+         "Owner": "ThirdParty",
+         "Provider": "GitHub",
+         "Version": "1"
+        },
+        "Configuration": {
+         "Owner": "mzienert",
+         "Repo": "asa-racing-ui",
+         "Branch": "main",
+         "OAuthToken": "{{resolve:secretsmanager:github-token-secret-name:SecretString:::}}",
+         "PollForSourceChanges": false
+        },
+        "Name": "GitHub_Source",
+        "OutputArtifacts": [
+         {
+          "Name": "SourceOutput"
+         }
+        ],
+        "RunOrder": 1
+       }
+      ],
+      "Name": "Source"
+     },
+     {
+      "Actions": [
+       {
+        "ActionTypeId": {
+         "Category": "Build",
+         "Owner": "AWS",
+         "Provider": "CodeBuild",
+         "Version": "1"
+        },
+        "Configuration": {
+         "ProjectName": {
+          "Ref": "AsaRacingNextJSPipelineConstructV2BuildProjectD387B40A"
+         }
+        },
+        "InputArtifacts": [
+         {
+          "Name": "SourceOutput"
+         }
+        ],
+        "Name": "Build",
+        "OutputArtifacts": [
+         {
+          "Name": "BuildOutput"
+         }
+        ],
+        "RoleArn": {
+         "Fn::GetAtt": [
+          "AsaRacingNextJSPipelineConstructV2PipelineBuildCodePipelineActionRole0A3EB494",
+          "Arn"
+         ]
+        },
+        "RunOrder": 1
+       }
+      ],
+      "Name": "Build"
+     }
+    ]
+   },
+   "DependsOn": [
+    "AsaRacingNextJSPipelineConstructV2PipelineRoleDefaultPolicy73C3FD5E",
+    "AsaRacingNextJSPipelineConstructV2PipelineRoleA2F61DBC"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "AsaRacingStack/AsaRacingNextJSPipelineConstructV2/Pipeline/Resource"
+   }
+  },
+  "AsaRacingNextJSPipelineConstructV2PipelineSourceGitHubSourceWebhookResourceAE5EDC38": {
+   "Type": "AWS::CodePipeline::Webhook",
+   "Properties": {
+    "Authentication": "GITHUB_HMAC",
+    "AuthenticationConfiguration": {
+     "SecretToken": "{{resolve:secretsmanager:github-token-secret-name:SecretString:::}}"
+    },
+    "Filters": [
+     {
+      "JsonPath": "$.ref",
+      "MatchEquals": "refs/heads/{Branch}"
+     }
+    ],
+    "RegisterWithThirdParty": true,
+    "TargetAction": "GitHub_Source",
+    "TargetPipeline": {
+     "Ref": "AsaRacingNextJSPipelineConstructV2Pipeline383ACCBF"
+    },
+    "TargetPipelineVersion": 1
+   },
+   "Metadata": {
+    "aws:cdk:path": "AsaRacingStack/AsaRacingNextJSPipelineConstructV2/Pipeline/Source/GitHub_Source/WebhookResource"
+   }
+  },
+  "AsaRacingNextJSPipelineConstructV2PipelineBuildCodePipelineActionRole0A3EB494": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "AWS": {
+         "Fn::Join": [
+          "",
+          [
+           "arn:",
+           {
+            "Ref": "AWS::Partition"
+           },
+           ":iam::619326977873:root"
+          ]
+         ]
+        }
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "AsaRacingStack/AsaRacingNextJSPipelineConstructV2/Pipeline/Build/Build/CodePipelineActionRole/Resource"
+   }
+  },
+  "AsaRacingNextJSPipelineConstructV2PipelineBuildCodePipelineActionRoleDefaultPolicy9392CA9F": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "codebuild:BatchGetBuilds",
+        "codebuild:StartBuild",
+        "codebuild:StopBuild"
+       ],
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::GetAtt": [
+         "AsaRacingNextJSPipelineConstructV2BuildProjectD387B40A",
+         "Arn"
+        ]
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "AsaRacingNextJSPipelineConstructV2PipelineBuildCodePipelineActionRoleDefaultPolicy9392CA9F",
+    "Roles": [
+     {
+      "Ref": "AsaRacingNextJSPipelineConstructV2PipelineBuildCodePipelineActionRole0A3EB494"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "AsaRacingStack/AsaRacingNextJSPipelineConstructV2/Pipeline/Build/Build/CodePipelineActionRole/DefaultPolicy/Resource"
+   }
+  },
+  "ARecordE7B57761": {
+   "Type": "AWS::Route53::RecordSet",
+   "Properties": {
+    "AliasTarget": {
+     "DNSName": {
+      "Fn::GetAtt": [
+       "AsaRacingNextJSPipelineConstructV2WebsiteDistribution14D0C0DD",
+       "DomainName"
+      ]
+     },
+     "HostedZoneId": {
+      "Fn::FindInMap": [
+       "AWSCloudFrontPartitionHostedZoneIdMap",
+       {
+        "Ref": "AWS::Partition"
+       },
+       "zoneId"
+      ]
+     }
+    },
+    "HostedZoneId": "Z04794862UTJ4V1BLEDTH",
+    "Name": "asaracing.live.",
+    "Type": "A"
+   },
+   "Metadata": {
+    "aws:cdk:path": "AsaRacingStack/ARecord/Resource"
+   }
+  },
+  "WWWARecord1A0BFA03": {
+   "Type": "AWS::Route53::RecordSet",
+   "Properties": {
+    "AliasTarget": {
+     "DNSName": {
+      "Fn::GetAtt": [
+       "AsaRacingNextJSPipelineConstructV2WebsiteDistribution14D0C0DD",
+       "DomainName"
+      ]
+     },
+     "HostedZoneId": {
+      "Fn::FindInMap": [
+       "AWSCloudFrontPartitionHostedZoneIdMap",
+       {
+        "Ref": "AWS::Partition"
+       },
+       "zoneId"
+      ]
+     }
+    },
+    "HostedZoneId": "Z04794862UTJ4V1BLEDTH",
+    "Name": "www.asaracing.live.",
+    "Type": "A"
+   },
+   "Metadata": {
+    "aws:cdk:path": "AsaRacingStack/WWWARecord/Resource"
+   }
+  },
+  "DefineAuthChallengeServiceRole1D83696B": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "AsaRacingStack/DefineAuthChallenge/ServiceRole/Resource"
+   }
+  },
+  "DefineAuthChallengeE7E3BC7B": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": "cdk-hnb659fds-assets-619326977873-us-west-1",
+     "S3Key": "f15abf240e4b3ed0e0750547d8d6eed4d42a0438cbf367bdfddf6b81245503bd.zip"
+    },
+    "Handler": "index.handler",
+    "Role": {
+     "Fn::GetAtt": [
+      "DefineAuthChallengeServiceRole1D83696B",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs18.x"
+   },
+   "DependsOn": [
+    "DefineAuthChallengeServiceRole1D83696B"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "AsaRacingStack/DefineAuthChallenge/Resource",
+    "aws:asset:path": "asset.f15abf240e4b3ed0e0750547d8d6eed4d42a0438cbf367bdfddf6b81245503bd",
+    "aws:asset:is-bundled": true,
+    "aws:asset:property": "Code"
+   }
+  },
+  "CreateAuthChallengeServiceRoleCE50EC04": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "AsaRacingStack/CreateAuthChallenge/ServiceRole/Resource"
+   }
+  },
+  "CreateAuthChallengeServiceRoleDefaultPolicy637265A4": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "ses:SendEmail",
+        "ses:SendRawEmail"
+       ],
+       "Effect": "Allow",
+       "Resource": "*"
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "CreateAuthChallengeServiceRoleDefaultPolicy637265A4",
+    "Roles": [
+     {
+      "Ref": "CreateAuthChallengeServiceRoleCE50EC04"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "AsaRacingStack/CreateAuthChallenge/ServiceRole/DefaultPolicy/Resource"
+   }
+  },
+  "CreateAuthChallengeB2F8D873": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": "cdk-hnb659fds-assets-619326977873-us-west-1",
+     "S3Key": "f0b0770a090302dfab104b5f05d20e8cc5452a777cdb269f2d85ebadfd6ad516.zip"
+    },
+    "Handler": "index.handler",
+    "Role": {
+     "Fn::GetAtt": [
+      "CreateAuthChallengeServiceRoleCE50EC04",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs18.x"
+   },
+   "DependsOn": [
+    "CreateAuthChallengeServiceRoleDefaultPolicy637265A4",
+    "CreateAuthChallengeServiceRoleCE50EC04"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "AsaRacingStack/CreateAuthChallenge/Resource",
+    "aws:asset:path": "asset.f0b0770a090302dfab104b5f05d20e8cc5452a777cdb269f2d85ebadfd6ad516",
+    "aws:asset:is-bundled": true,
+    "aws:asset:property": "Code"
+   }
+  },
+  "VerifyAuthChallengeServiceRole0AEAA465": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "AsaRacingStack/VerifyAuthChallenge/ServiceRole/Resource"
+   }
+  },
+  "VerifyAuthChallenge610ED36B": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": "cdk-hnb659fds-assets-619326977873-us-west-1",
+     "S3Key": "62355abb1139fd520e0b73fa1c55ff3f1a649bcf59c6fae9e40b31ed95a5c1a2.zip"
+    },
+    "Handler": "index.handler",
+    "Role": {
+     "Fn::GetAtt": [
+      "VerifyAuthChallengeServiceRole0AEAA465",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs18.x"
+   },
+   "DependsOn": [
+    "VerifyAuthChallengeServiceRole0AEAA465"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "AsaRacingStack/VerifyAuthChallenge/Resource",
+    "aws:asset:path": "asset.62355abb1139fd520e0b73fa1c55ff3f1a649bcf59c6fae9e40b31ed95a5c1a2",
+    "aws:asset:is-bundled": true,
+    "aws:asset:property": "Code"
+   }
+  },
+  "CognitoPoolDefineAuthChallengeCognitoD50A066D": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "DefineAuthChallengeE7E3BC7B",
+      "Arn"
+     ]
+    },
+    "Principal": "cognito-idp.amazonaws.com",
+    "SourceArn": {
+     "Fn::GetAtt": [
+      "CognitoPool9328EF5E",
+      "Arn"
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "AsaRacingStack/CognitoPool/CognitoPool/DefineAuthChallengeCognito"
+   }
+  },
+  "CognitoPoolCreateAuthChallengeCognitoB37B4515": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "CreateAuthChallengeB2F8D873",
+      "Arn"
+     ]
+    },
+    "Principal": "cognito-idp.amazonaws.com",
+    "SourceArn": {
+     "Fn::GetAtt": [
+      "CognitoPool9328EF5E",
+      "Arn"
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "AsaRacingStack/CognitoPool/CognitoPool/CreateAuthChallengeCognito"
+   }
+  },
+  "CognitoPoolVerifyAuthChallengeResponseCognito480B7C15": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "VerifyAuthChallenge610ED36B",
+      "Arn"
+     ]
+    },
+    "Principal": "cognito-idp.amazonaws.com",
+    "SourceArn": {
+     "Fn::GetAtt": [
+      "CognitoPool9328EF5E",
+      "Arn"
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "AsaRacingStack/CognitoPool/CognitoPool/VerifyAuthChallengeResponseCognito"
+   }
+  },
+  "CognitoPool9328EF5E": {
+   "Type": "AWS::Cognito::UserPool",
+   "Properties": {
+    "AccountRecoverySetting": {
+     "RecoveryMechanisms": [
+      {
+       "Name": "verified_phone_number",
+       "Priority": 1
+      },
+      {
+       "Name": "verified_email",
+       "Priority": 2
+      }
+     ]
+    },
+    "AdminCreateUserConfig": {
+     "AllowAdminCreateUserOnly": true
+    },
+    "AutoVerifiedAttributes": [
+     "email"
+    ],
+    "EmailConfiguration": {
+     "EmailSendingAccount": "COGNITO_DEFAULT"
+    },
+    "EmailVerificationMessage": "The verification code to your new account is {####}",
+    "EmailVerificationSubject": "Verify your new account",
+    "LambdaConfig": {
+     "CreateAuthChallenge": {
+      "Fn::GetAtt": [
+       "CreateAuthChallengeB2F8D873",
+       "Arn"
+      ]
+     },
+     "DefineAuthChallenge": {
+      "Fn::GetAtt": [
+       "DefineAuthChallengeE7E3BC7B",
+       "Arn"
+      ]
+     },
+     "VerifyAuthChallengeResponse": {
+      "Fn::GetAtt": [
+       "VerifyAuthChallenge610ED36B",
+       "Arn"
+      ]
+     }
+    },
+    "Policies": {
+     "PasswordPolicy": {
+      "MinimumLength": 6,
+      "RequireLowercase": false,
+      "RequireNumbers": false,
+      "RequireSymbols": false,
+      "RequireUppercase": false
+     }
+    },
+    "Schema": [
+     {
+      "Mutable": true,
+      "Name": "given_name",
+      "Required": true
+     },
+     {
+      "Mutable": true,
+      "Name": "email",
+      "Required": true
+     }
+    ],
+    "SmsVerificationMessage": "The verification code to your new account is {####}",
+    "UserPoolName": "dev-asa-racing-user-pool",
+    "UsernameAttributes": [
+     "email"
+    ],
+    "UsernameConfiguration": {
+     "CaseSensitive": false
+    },
+    "VerificationMessageTemplate": {
+     "DefaultEmailOption": "CONFIRM_WITH_CODE",
+     "EmailMessage": "The verification code to your new account is {####}",
+     "EmailSubject": "Verify your new account",
+     "SmsMessage": "The verification code to your new account is {####}"
+    }
+   },
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain",
+   "Metadata": {
+    "aws:cdk:path": "AsaRacingStack/CognitoPool/CognitoPool/Resource"
+   }
+  },
+  "CognitoPoolMyAppClient1CD10A1A": {
+   "Type": "AWS::Cognito::UserPoolClient",
+   "Properties": {
+    "AccessTokenValidity": 30,
+    "AllowedOAuthFlows": [
+     "implicit",
+     "code"
+    ],
+    "AllowedOAuthFlowsUserPoolClient": true,
+    "AllowedOAuthScopes": [
+     "profile",
+     "phone",
+     "email",
+     "openid",
+     "aws.cognito.signin.user.admin"
+    ],
+    "CallbackURLs": [
+     "https://example.com"
+    ],
+    "ClientName": "dev-asa-racing-client",
+    "ExplicitAuthFlows": [
+     "ALLOW_CUSTOM_AUTH",
+     "ALLOW_USER_SRP_AUTH",
+     "ALLOW_REFRESH_TOKEN_AUTH"
+    ],
+    "IdTokenValidity": 30,
+    "PreventUserExistenceErrors": "ENABLED",
+    "RefreshTokenValidity": 60,
+    "SupportedIdentityProviders": [
+     "COGNITO"
+    ],
+    "TokenValidityUnits": {
+     "AccessToken": "minutes",
+     "IdToken": "minutes",
+     "RefreshToken": "minutes"
+    },
+    "UserPoolId": {
+     "Ref": "CognitoPool9328EF5E"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "AsaRacingStack/CognitoPool/CognitoPool/MyAppClient/Resource"
+   }
+  },
+  "ApiLambdasauthcreateauthchallengeRoleF037F15B": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "AsaRacingStack/ApiLambdas/auth-create-auth-challenge-Role/Resource"
+   }
+  },
+  "ApiLambdasauthcreateauthchallengeRoleDefaultPolicy3885D950": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "logs:CreateLogGroup",
+        "logs:CreateLogStream",
+        "logs:PutLogEvents"
+       ],
+       "Effect": "Allow",
+       "Resource": "*"
+      },
+      {
+       "Action": [
+        "xray:PutTraceSegments",
+        "xray:PutTelemetryRecords"
+       ],
+       "Effect": "Allow",
+       "Resource": "*"
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "ApiLambdasauthcreateauthchallengeRoleDefaultPolicy3885D950",
+    "Roles": [
+     {
+      "Ref": "ApiLambdasauthcreateauthchallengeRoleF037F15B"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "AsaRacingStack/ApiLambdas/auth-create-auth-challenge-Role/DefaultPolicy/Resource"
+   }
+  },
+  "ApiLambdasLambdaauthcreateauthchallengeB9D8C488": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": "cdk-hnb659fds-assets-619326977873-us-west-1",
+     "S3Key": "b8c680f9a8e4c9d5f512dfae58099c6be495a037161336c9635eca2c29d3ae2b.zip"
+    },
+    "Environment": {
+     "Variables": {
+      "COGNITO_USER_POOL_ARN": {
+       "Fn::GetAtt": [
+        "CognitoPool9328EF5E",
+        "Arn"
+       ]
+      },
+      "DYNAMO_TABLE_ARN": {
+       "Fn::GetAtt": [
+        "KlineTable986A720B",
+        "Arn"
+       ]
+      }
+     }
+    },
+    "Handler": "index.handler",
+    "Role": {
+     "Fn::GetAtt": [
+      "ApiLambdasauthcreateauthchallengeRoleF037F15B",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs18.x",
+    "TracingConfig": {
+     "Mode": "Active"
+    }
+   },
+   "DependsOn": [
+    "ApiLambdasauthcreateauthchallengeRoleDefaultPolicy3885D950",
+    "ApiLambdasauthcreateauthchallengeRoleF037F15B"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "AsaRacingStack/ApiLambdas/Lambda-auth-create-auth-challenge/Resource",
+    "aws:asset:path": "asset.b8c680f9a8e4c9d5f512dfae58099c6be495a037161336c9635eca2c29d3ae2b",
+    "aws:asset:is-bundled": true,
+    "aws:asset:property": "Code"
+   }
+  },
+  "ApiLambdasLambdaauthcreateauthchallengeLogRetention9D77D282": {
+   "Type": "Custom::LogRetention",
+   "Properties": {
+    "ServiceToken": {
+     "Fn::GetAtt": [
+      "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
+      "Arn"
+     ]
+    },
+    "LogGroupName": {
+     "Fn::Join": [
+      "",
+      [
+       "/aws/lambda/",
+       {
+        "Ref": "ApiLambdasLambdaauthcreateauthchallengeB9D8C488"
+       }
+      ]
+     ]
+    },
+    "RetentionInDays": 7
+   },
+   "Metadata": {
+    "aws:cdk:path": "AsaRacingStack/ApiLambdas/Lambda-auth-create-auth-challenge/LogRetention/Resource"
+   }
+  },
+  "ApiLambdasauthdefineauthchallengeRole353EBA87": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "AsaRacingStack/ApiLambdas/auth-define-auth-challenge-Role/Resource"
+   }
+  },
+  "ApiLambdasauthdefineauthchallengeRoleDefaultPolicy54E5CB65": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "logs:CreateLogGroup",
+        "logs:CreateLogStream",
+        "logs:PutLogEvents"
+       ],
+       "Effect": "Allow",
+       "Resource": "*"
+      },
+      {
+       "Action": [
+        "xray:PutTraceSegments",
+        "xray:PutTelemetryRecords"
+       ],
+       "Effect": "Allow",
+       "Resource": "*"
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "ApiLambdasauthdefineauthchallengeRoleDefaultPolicy54E5CB65",
+    "Roles": [
+     {
+      "Ref": "ApiLambdasauthdefineauthchallengeRole353EBA87"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "AsaRacingStack/ApiLambdas/auth-define-auth-challenge-Role/DefaultPolicy/Resource"
+   }
+  },
+  "ApiLambdasLambdaauthdefineauthchallenge3852A3CE": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": "cdk-hnb659fds-assets-619326977873-us-west-1",
+     "S3Key": "ef4d3ca024b4cf7bc26a366ff1c980d14d62f48d8aed5945cdb1dbe836630d3f.zip"
+    },
+    "Environment": {
+     "Variables": {
+      "COGNITO_USER_POOL_ARN": {
+       "Fn::GetAtt": [
+        "CognitoPool9328EF5E",
+        "Arn"
+       ]
+      },
+      "DYNAMO_TABLE_ARN": {
+       "Fn::GetAtt": [
+        "KlineTable986A720B",
+        "Arn"
+       ]
+      }
+     }
+    },
+    "Handler": "index.handler",
+    "Role": {
+     "Fn::GetAtt": [
+      "ApiLambdasauthdefineauthchallengeRole353EBA87",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs18.x",
+    "TracingConfig": {
+     "Mode": "Active"
+    }
+   },
+   "DependsOn": [
+    "ApiLambdasauthdefineauthchallengeRoleDefaultPolicy54E5CB65",
+    "ApiLambdasauthdefineauthchallengeRole353EBA87"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "AsaRacingStack/ApiLambdas/Lambda-auth-define-auth-challenge/Resource",
+    "aws:asset:path": "asset.ef4d3ca024b4cf7bc26a366ff1c980d14d62f48d8aed5945cdb1dbe836630d3f",
+    "aws:asset:is-bundled": true,
+    "aws:asset:property": "Code"
+   }
+  },
+  "ApiLambdasLambdaauthdefineauthchallengeLogRetentionB0598B92": {
+   "Type": "Custom::LogRetention",
+   "Properties": {
+    "ServiceToken": {
+     "Fn::GetAtt": [
+      "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
+      "Arn"
+     ]
+    },
+    "LogGroupName": {
+     "Fn::Join": [
+      "",
+      [
+       "/aws/lambda/",
+       {
+        "Ref": "ApiLambdasLambdaauthdefineauthchallenge3852A3CE"
+       }
+      ]
+     ]
+    },
+    "RetentionInDays": 7
+   },
+   "Metadata": {
+    "aws:cdk:path": "AsaRacingStack/ApiLambdas/Lambda-auth-define-auth-challenge/LogRetention/Resource"
+   }
+  },
+  "ApiLambdasauthmanagesessionRole24DCACD3": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "AsaRacingStack/ApiLambdas/auth-manage-session-Role/Resource"
+   }
+  },
+  "ApiLambdasauthmanagesessionRoleDefaultPolicyF5E396DA": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "logs:CreateLogGroup",
+        "logs:CreateLogStream",
+        "logs:PutLogEvents"
+       ],
+       "Effect": "Allow",
+       "Resource": "*"
+      },
+      {
+       "Action": [
+        "xray:PutTraceSegments",
+        "xray:PutTelemetryRecords"
+       ],
+       "Effect": "Allow",
+       "Resource": "*"
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "ApiLambdasauthmanagesessionRoleDefaultPolicyF5E396DA",
+    "Roles": [
+     {
+      "Ref": "ApiLambdasauthmanagesessionRole24DCACD3"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "AsaRacingStack/ApiLambdas/auth-manage-session-Role/DefaultPolicy/Resource"
+   }
+  },
+  "ApiLambdasLambdaauthmanagesessionA07F4853": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": "cdk-hnb659fds-assets-619326977873-us-west-1",
+     "S3Key": "a896c35f50f222806255aafa27dd3908f56310104f1bfca13a695ec8568d0958.zip"
+    },
+    "Environment": {
+     "Variables": {
+      "COGNITO_USER_POOL_ARN": {
+       "Fn::GetAtt": [
+        "CognitoPool9328EF5E",
+        "Arn"
+       ]
+      },
+      "DYNAMO_TABLE_ARN": {
+       "Fn::GetAtt": [
+        "KlineTable986A720B",
+        "Arn"
+       ]
+      }
+     }
+    },
+    "Handler": "index.handler",
+    "Role": {
+     "Fn::GetAtt": [
+      "ApiLambdasauthmanagesessionRole24DCACD3",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs18.x",
+    "TracingConfig": {
+     "Mode": "Active"
+    }
+   },
+   "DependsOn": [
+    "ApiLambdasauthmanagesessionRoleDefaultPolicyF5E396DA",
+    "ApiLambdasauthmanagesessionRole24DCACD3"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "AsaRacingStack/ApiLambdas/Lambda-auth-manage-session/Resource",
+    "aws:asset:path": "asset.a896c35f50f222806255aafa27dd3908f56310104f1bfca13a695ec8568d0958",
+    "aws:asset:is-bundled": true,
+    "aws:asset:property": "Code"
+   }
+  },
+  "ApiLambdasLambdaauthmanagesessionLogRetentionAB1968A9": {
+   "Type": "Custom::LogRetention",
+   "Properties": {
+    "ServiceToken": {
+     "Fn::GetAtt": [
+      "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
+      "Arn"
+     ]
+    },
+    "LogGroupName": {
+     "Fn::Join": [
+      "",
+      [
+       "/aws/lambda/",
+       {
+        "Ref": "ApiLambdasLambdaauthmanagesessionA07F4853"
+       }
+      ]
+     ]
+    },
+    "RetentionInDays": 7
+   },
+   "Metadata": {
+    "aws:cdk:path": "AsaRacingStack/ApiLambdas/Lambda-auth-manage-session/LogRetention/Resource"
+   }
+  },
+  "ApiLambdasauthverifyauthchallengeRoleBE7D1EB6": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "AsaRacingStack/ApiLambdas/auth-verify-auth-challenge-Role/Resource"
+   }
+  },
+  "ApiLambdasauthverifyauthchallengeRoleDefaultPolicyA260FD5F": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "logs:CreateLogGroup",
+        "logs:CreateLogStream",
+        "logs:PutLogEvents"
+       ],
+       "Effect": "Allow",
+       "Resource": "*"
+      },
+      {
+       "Action": [
+        "xray:PutTraceSegments",
+        "xray:PutTelemetryRecords"
+       ],
+       "Effect": "Allow",
+       "Resource": "*"
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "ApiLambdasauthverifyauthchallengeRoleDefaultPolicyA260FD5F",
+    "Roles": [
+     {
+      "Ref": "ApiLambdasauthverifyauthchallengeRoleBE7D1EB6"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "AsaRacingStack/ApiLambdas/auth-verify-auth-challenge-Role/DefaultPolicy/Resource"
+   }
+  },
+  "ApiLambdasLambdaauthverifyauthchallenge452EFF04": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": "cdk-hnb659fds-assets-619326977873-us-west-1",
+     "S3Key": "431fe30c49753f6416bdc43ecb392527921a1418d5349ef026fb711ba755d84b.zip"
+    },
+    "Environment": {
+     "Variables": {
+      "COGNITO_USER_POOL_ARN": {
+       "Fn::GetAtt": [
+        "CognitoPool9328EF5E",
+        "Arn"
+       ]
+      },
+      "DYNAMO_TABLE_ARN": {
+       "Fn::GetAtt": [
+        "KlineTable986A720B",
+        "Arn"
+       ]
+      }
+     }
+    },
+    "Handler": "index.handler",
+    "Role": {
+     "Fn::GetAtt": [
+      "ApiLambdasauthverifyauthchallengeRoleBE7D1EB6",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs18.x",
+    "TracingConfig": {
+     "Mode": "Active"
+    }
+   },
+   "DependsOn": [
+    "ApiLambdasauthverifyauthchallengeRoleDefaultPolicyA260FD5F",
+    "ApiLambdasauthverifyauthchallengeRoleBE7D1EB6"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "AsaRacingStack/ApiLambdas/Lambda-auth-verify-auth-challenge/Resource",
+    "aws:asset:path": "asset.431fe30c49753f6416bdc43ecb392527921a1418d5349ef026fb711ba755d84b",
+    "aws:asset:is-bundled": true,
+    "aws:asset:property": "Code"
+   }
+  },
+  "ApiLambdasLambdaauthverifyauthchallengeLogRetention6F915257": {
+   "Type": "Custom::LogRetention",
+   "Properties": {
+    "ServiceToken": {
+     "Fn::GetAtt": [
+      "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
+      "Arn"
+     ]
+    },
+    "LogGroupName": {
+     "Fn::Join": [
+      "",
+      [
+       "/aws/lambda/",
+       {
+        "Ref": "ApiLambdasLambdaauthverifyauthchallenge452EFF04"
+       }
+      ]
+     ]
+    },
+    "RetentionInDays": 7
+   },
+   "Metadata": {
+    "aws:cdk:path": "AsaRacingStack/ApiLambdas/Lambda-auth-verify-auth-challenge/LogRetention/Resource"
+   }
+  },
+  "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "AsaRacingStack/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/ServiceRole/Resource"
+   }
+  },
+  "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "logs:PutRetentionPolicy",
+        "logs:DeleteRetentionPolicy"
+       ],
+       "Effect": "Allow",
+       "Resource": "*"
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB",
+    "Roles": [
+     {
+      "Ref": "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "AsaRacingStack/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/ServiceRole/DefaultPolicy/Resource"
+   }
+  },
+  "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Handler": "index.handler",
+    "Runtime": "nodejs20.x",
+    "Timeout": 900,
+    "Code": {
+     "S3Bucket": "cdk-hnb659fds-assets-619326977873-us-west-1",
+     "S3Key": "2819175352ad1ce0dae768e83fc328fb70fb5f10b4a8ff0ccbcb791f02b0716d.zip"
+    },
+    "Role": {
+     "Fn::GetAtt": [
+      "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB",
+      "Arn"
+     ]
+    }
+   },
+   "DependsOn": [
+    "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB",
+    "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "AsaRacingStack/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/Resource",
+    "aws:asset:path": "asset.2819175352ad1ce0dae768e83fc328fb70fb5f10b4a8ff0ccbcb791f02b0716d",
+    "aws:asset:is-bundled": false,
+    "aws:asset:property": "Code"
+   }
+  },
+  "AsaRacingApiE4FF1702": {
+   "Type": "AWS::ApiGateway::RestApi",
+   "Properties": {
+    "Name": "ASA Racing API"
+   },
+   "Metadata": {
+    "aws:cdk:path": "AsaRacingStack/AsaRacingApi/AsaRacingApi/Resource"
+   }
+  },
+  "AsaRacingApiCloudWatchRole8FDE5915": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "apigateway.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs"
+       ]
+      ]
+     }
+    ]
+   },
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain",
+   "Metadata": {
+    "aws:cdk:path": "AsaRacingStack/AsaRacingApi/AsaRacingApi/CloudWatchRole/Resource"
+   }
+  },
+  "AsaRacingApiAccount1583A578": {
+   "Type": "AWS::ApiGateway::Account",
+   "Properties": {
+    "CloudWatchRoleArn": {
+     "Fn::GetAtt": [
+      "AsaRacingApiCloudWatchRole8FDE5915",
+      "Arn"
+     ]
+    }
+   },
+   "DependsOn": [
+    "AsaRacingApiE4FF1702"
+   ],
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain",
+   "Metadata": {
+    "aws:cdk:path": "AsaRacingStack/AsaRacingApi/AsaRacingApi/Account"
+   }
+  },
+  "AsaRacingApiDeployment66BD2311da53bd3c00cb518f3626b173586d90c2": {
+   "Type": "AWS::ApiGateway::Deployment",
+   "Properties": {
+    "Description": "Automatically created by the RestApi construct",
+    "RestApiId": {
+     "Ref": "AsaRacingApiE4FF1702"
+    }
+   },
+   "DependsOn": [
+    "AsaRacingApiauthcreateauthchallengeGETB5F9FAC1",
+    "AsaRacingApiauthcreateauthchallengeOPTIONS278AC799",
+    "AsaRacingApiauthcreateauthchallenge53345C0F",
+    "AsaRacingApiauthdefineauthchallengeGET5E5EF565",
+    "AsaRacingApiauthdefineauthchallengeOPTIONS8A625292",
+    "AsaRacingApiauthdefineauthchallenge68C7B6FE",
+    "AsaRacingApiauthmanagesessionOPTIONSF74FA8F4",
+    "AsaRacingApiauthmanagesessionPOSTD884EC75",
+    "AsaRacingApiauthmanagesessionD889E8D9",
+    "AsaRacingApiauthmanagesessionverifyGET4DBEF15D",
+    "AsaRacingApiauthmanagesessionverifyOPTIONSE6DC184C",
+    "AsaRacingApiauthmanagesessionverifyF8F4996B",
+    "AsaRacingApiauthOPTIONSBF3239DF",
+    "AsaRacingApiauthC526314E",
+    "AsaRacingApiauthverifyauthchallengeGET848B73B5",
+    "AsaRacingApiauthverifyauthchallengeOPTIONS7E47379E",
+    "AsaRacingApiauthverifyauthchallengeC5656351",
+    "AsaRacingApiOPTIONS30B9C859"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "AsaRacingStack/AsaRacingApi/AsaRacingApi/Deployment/Resource"
+   }
+  },
+  "AsaRacingApiDeploymentStageprod82E0A178": {
+   "Type": "AWS::ApiGateway::Stage",
+   "Properties": {
+    "DeploymentId": {
+     "Ref": "AsaRacingApiDeployment66BD2311da53bd3c00cb518f3626b173586d90c2"
+    },
+    "MethodSettings": [
+     {
+      "DataTraceEnabled": true,
+      "HttpMethod": "*",
+      "LoggingLevel": "INFO",
+      "MetricsEnabled": true,
+      "ResourcePath": "/*"
+     }
+    ],
+    "RestApiId": {
+     "Ref": "AsaRacingApiE4FF1702"
+    },
+    "StageName": "prod"
+   },
+   "DependsOn": [
+    "AsaRacingApiAccount1583A578"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "AsaRacingStack/AsaRacingApi/AsaRacingApi/DeploymentStage.prod/Resource"
+   }
+  },
+  "AsaRacingApiOPTIONS30B9C859": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "ApiKeyRequired": false,
+    "AuthorizationType": "NONE",
+    "HttpMethod": "OPTIONS",
+    "Integration": {
+     "IntegrationResponses": [
+      {
+       "ResponseParameters": {
+        "method.response.header.Access-Control-Allow-Headers": "'Content-Type,Authorization,Cookie,X-Amz-Date,X-Api-Key,X-Amz-Security-Token'",
+        "method.response.header.Access-Control-Allow-Origin": "'https://www.asaracing.live'",
+        "method.response.header.Vary": "'Origin'",
+        "method.response.header.Access-Control-Allow-Methods": "'GET,POST,OPTIONS'",
+        "method.response.header.Access-Control-Allow-Credentials": "'true'",
+        "method.response.header.Access-Control-Max-Age": "'300'"
+       },
+       "ResponseTemplates": {
+        "application/json": "#set($origin = $input.params().header.get(\"Origin\"))\n#if($origin == \"\")\n  #set($origin = $input.params().header.get(\"origin\"))\n#end\n#if($origin == \"http://localhost:3000\")\n  #set($context.responseOverride.header.Access-Control-Allow-Origin = $origin)\n#end"
+       },
+       "StatusCode": "204"
+      }
+     ],
+     "RequestTemplates": {
+      "application/json": "{ statusCode: 200 }"
+     },
+     "Type": "MOCK"
+    },
+    "MethodResponses": [
+     {
+      "ResponseParameters": {
+       "method.response.header.Access-Control-Allow-Headers": true,
+       "method.response.header.Access-Control-Allow-Origin": true,
+       "method.response.header.Vary": true,
+       "method.response.header.Access-Control-Allow-Methods": true,
+       "method.response.header.Access-Control-Allow-Credentials": true,
+       "method.response.header.Access-Control-Max-Age": true
+      },
+      "StatusCode": "204"
+     }
+    ],
+    "ResourceId": {
+     "Fn::GetAtt": [
+      "AsaRacingApiE4FF1702",
+      "RootResourceId"
+     ]
+    },
+    "RestApiId": {
+     "Ref": "AsaRacingApiE4FF1702"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "AsaRacingStack/AsaRacingApi/AsaRacingApi/Default/OPTIONS/Resource"
+   }
+  },
+  "AsaRacingApiauthC526314E": {
+   "Type": "AWS::ApiGateway::Resource",
+   "Properties": {
+    "ParentId": {
+     "Fn::GetAtt": [
+      "AsaRacingApiE4FF1702",
+      "RootResourceId"
+     ]
+    },
+    "PathPart": "auth",
+    "RestApiId": {
+     "Ref": "AsaRacingApiE4FF1702"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "AsaRacingStack/AsaRacingApi/AsaRacingApi/Default/auth/Resource"
+   }
+  },
+  "AsaRacingApiauthOPTIONSBF3239DF": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "ApiKeyRequired": false,
+    "AuthorizationType": "NONE",
+    "HttpMethod": "OPTIONS",
+    "Integration": {
+     "IntegrationResponses": [
+      {
+       "ResponseParameters": {
+        "method.response.header.Access-Control-Allow-Headers": "'Content-Type,Authorization,Cookie,X-Amz-Date,X-Api-Key,X-Amz-Security-Token'",
+        "method.response.header.Access-Control-Allow-Origin": "'https://www.asaracing.live'",
+        "method.response.header.Vary": "'Origin'",
+        "method.response.header.Access-Control-Allow-Methods": "'GET,POST,OPTIONS'",
+        "method.response.header.Access-Control-Allow-Credentials": "'true'",
+        "method.response.header.Access-Control-Max-Age": "'300'"
+       },
+       "ResponseTemplates": {
+        "application/json": "#set($origin = $input.params().header.get(\"Origin\"))\n#if($origin == \"\")\n  #set($origin = $input.params().header.get(\"origin\"))\n#end\n#if($origin == \"http://localhost:3000\")\n  #set($context.responseOverride.header.Access-Control-Allow-Origin = $origin)\n#end"
+       },
+       "StatusCode": "204"
+      }
+     ],
+     "RequestTemplates": {
+      "application/json": "{ statusCode: 200 }"
+     },
+     "Type": "MOCK"
+    },
+    "MethodResponses": [
+     {
+      "ResponseParameters": {
+       "method.response.header.Access-Control-Allow-Headers": true,
+       "method.response.header.Access-Control-Allow-Origin": true,
+       "method.response.header.Vary": true,
+       "method.response.header.Access-Control-Allow-Methods": true,
+       "method.response.header.Access-Control-Allow-Credentials": true,
+       "method.response.header.Access-Control-Max-Age": true
+      },
+      "StatusCode": "204"
+     }
+    ],
+    "ResourceId": {
+     "Ref": "AsaRacingApiauthC526314E"
+    },
+    "RestApiId": {
+     "Ref": "AsaRacingApiE4FF1702"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "AsaRacingStack/AsaRacingApi/AsaRacingApi/Default/auth/OPTIONS/Resource"
+   }
+  },
+  "AsaRacingApiauthcreateauthchallenge53345C0F": {
+   "Type": "AWS::ApiGateway::Resource",
+   "Properties": {
+    "ParentId": {
+     "Ref": "AsaRacingApiauthC526314E"
+    },
+    "PathPart": "create-auth-challenge",
+    "RestApiId": {
+     "Ref": "AsaRacingApiE4FF1702"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "AsaRacingStack/AsaRacingApi/AsaRacingApi/Default/auth/create-auth-challenge/Resource"
+   }
+  },
+  "AsaRacingApiauthcreateauthchallengeOPTIONS278AC799": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "ApiKeyRequired": false,
+    "AuthorizationType": "NONE",
+    "HttpMethod": "OPTIONS",
+    "Integration": {
+     "IntegrationResponses": [
+      {
+       "ResponseParameters": {
+        "method.response.header.Access-Control-Allow-Headers": "'Content-Type,Authorization,Cookie,X-Amz-Date,X-Api-Key,X-Amz-Security-Token'",
+        "method.response.header.Access-Control-Allow-Origin": "'https://www.asaracing.live'",
+        "method.response.header.Vary": "'Origin'",
+        "method.response.header.Access-Control-Allow-Methods": "'GET,POST,OPTIONS'",
+        "method.response.header.Access-Control-Allow-Credentials": "'true'",
+        "method.response.header.Access-Control-Max-Age": "'300'"
+       },
+       "ResponseTemplates": {
+        "application/json": "#set($origin = $input.params().header.get(\"Origin\"))\n#if($origin == \"\")\n  #set($origin = $input.params().header.get(\"origin\"))\n#end\n#if($origin == \"http://localhost:3000\")\n  #set($context.responseOverride.header.Access-Control-Allow-Origin = $origin)\n#end"
+       },
+       "StatusCode": "204"
+      }
+     ],
+     "RequestTemplates": {
+      "application/json": "{ statusCode: 200 }"
+     },
+     "Type": "MOCK"
+    },
+    "MethodResponses": [
+     {
+      "ResponseParameters": {
+       "method.response.header.Access-Control-Allow-Headers": true,
+       "method.response.header.Access-Control-Allow-Origin": true,
+       "method.response.header.Vary": true,
+       "method.response.header.Access-Control-Allow-Methods": true,
+       "method.response.header.Access-Control-Allow-Credentials": true,
+       "method.response.header.Access-Control-Max-Age": true
+      },
+      "StatusCode": "204"
+     }
+    ],
+    "ResourceId": {
+     "Ref": "AsaRacingApiauthcreateauthchallenge53345C0F"
+    },
+    "RestApiId": {
+     "Ref": "AsaRacingApiE4FF1702"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "AsaRacingStack/AsaRacingApi/AsaRacingApi/Default/auth/create-auth-challenge/OPTIONS/Resource"
+   }
+  },
+  "AsaRacingApiauthcreateauthchallengeGETApiPermissionAsaRacingStackAsaRacingApi56C117FCGETauthcreateauthchallenge4588909B": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "ApiLambdasLambdaauthcreateauthchallengeB9D8C488",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:us-west-1:619326977873:",
+       {
+        "Ref": "AsaRacingApiE4FF1702"
+       },
+       "/",
+       {
+        "Ref": "AsaRacingApiDeploymentStageprod82E0A178"
+       },
+       "/GET/auth/create-auth-challenge"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "AsaRacingStack/AsaRacingApi/AsaRacingApi/Default/auth/create-auth-challenge/GET/ApiPermission.AsaRacingStackAsaRacingApi56C117FC.GET..auth.create-auth-challenge"
+   }
+  },
+  "AsaRacingApiauthcreateauthchallengeGETApiPermissionTestAsaRacingStackAsaRacingApi56C117FCGETauthcreateauthchallenge45AF3EFF": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "ApiLambdasLambdaauthcreateauthchallengeB9D8C488",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:us-west-1:619326977873:",
+       {
+        "Ref": "AsaRacingApiE4FF1702"
+       },
+       "/test-invoke-stage/GET/auth/create-auth-challenge"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "AsaRacingStack/AsaRacingApi/AsaRacingApi/Default/auth/create-auth-challenge/GET/ApiPermission.Test.AsaRacingStackAsaRacingApi56C117FC.GET..auth.create-auth-challenge"
+   }
+  },
+  "AsaRacingApiauthcreateauthchallengeGETB5F9FAC1": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "AuthorizationType": "NONE",
+    "HttpMethod": "GET",
+    "Integration": {
+     "IntegrationHttpMethod": "POST",
+     "IntegrationResponses": [
+      {
+       "ResponseParameters": {
+        "method.response.header.Access-Control-Allow-Origin": "'https://www.asaracing.live,http://localhost:3000'",
+        "method.response.header.Access-Control-Allow-Credentials": "'true'",
+        "method.response.header.Access-Control-Allow-Headers": "'Content-Type,Authorization,Cookie'",
+        "method.response.header.Access-Control-Allow-Methods": "'GET,POST,OPTIONS'",
+        "method.response.header.Access-Control-Expose-Headers": "'Set-Cookie'",
+        "method.response.header.Set-Cookie": "integration.response.header.Set-Cookie"
+       },
+       "StatusCode": "200"
+      }
+     ],
+     "Type": "AWS_PROXY",
+     "Uri": {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":apigateway:us-west-1:lambda:path/2015-03-31/functions/",
+        {
+         "Fn::GetAtt": [
+          "ApiLambdasLambdaauthcreateauthchallengeB9D8C488",
+          "Arn"
+         ]
+        },
+        "/invocations"
+       ]
+      ]
+     }
+    },
+    "MethodResponses": [
+     {
+      "ResponseParameters": {
+       "method.response.header.Access-Control-Allow-Origin": true,
+       "method.response.header.Access-Control-Allow-Credentials": true,
+       "method.response.header.Access-Control-Allow-Headers": true,
+       "method.response.header.Access-Control-Allow-Methods": true,
+       "method.response.header.Access-Control-Expose-Headers": true,
+       "method.response.header.Set-Cookie": true
+      },
+      "StatusCode": "200"
+     }
+    ],
+    "ResourceId": {
+     "Ref": "AsaRacingApiauthcreateauthchallenge53345C0F"
+    },
+    "RestApiId": {
+     "Ref": "AsaRacingApiE4FF1702"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "AsaRacingStack/AsaRacingApi/AsaRacingApi/Default/auth/create-auth-challenge/GET/Resource"
+   }
+  },
+  "AsaRacingApiauthdefineauthchallenge68C7B6FE": {
+   "Type": "AWS::ApiGateway::Resource",
+   "Properties": {
+    "ParentId": {
+     "Ref": "AsaRacingApiauthC526314E"
+    },
+    "PathPart": "define-auth-challenge",
+    "RestApiId": {
+     "Ref": "AsaRacingApiE4FF1702"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "AsaRacingStack/AsaRacingApi/AsaRacingApi/Default/auth/define-auth-challenge/Resource"
+   }
+  },
+  "AsaRacingApiauthdefineauthchallengeOPTIONS8A625292": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "ApiKeyRequired": false,
+    "AuthorizationType": "NONE",
+    "HttpMethod": "OPTIONS",
+    "Integration": {
+     "IntegrationResponses": [
+      {
+       "ResponseParameters": {
+        "method.response.header.Access-Control-Allow-Headers": "'Content-Type,Authorization,Cookie,X-Amz-Date,X-Api-Key,X-Amz-Security-Token'",
+        "method.response.header.Access-Control-Allow-Origin": "'https://www.asaracing.live'",
+        "method.response.header.Vary": "'Origin'",
+        "method.response.header.Access-Control-Allow-Methods": "'GET,POST,OPTIONS'",
+        "method.response.header.Access-Control-Allow-Credentials": "'true'",
+        "method.response.header.Access-Control-Max-Age": "'300'"
+       },
+       "ResponseTemplates": {
+        "application/json": "#set($origin = $input.params().header.get(\"Origin\"))\n#if($origin == \"\")\n  #set($origin = $input.params().header.get(\"origin\"))\n#end\n#if($origin == \"http://localhost:3000\")\n  #set($context.responseOverride.header.Access-Control-Allow-Origin = $origin)\n#end"
+       },
+       "StatusCode": "204"
+      }
+     ],
+     "RequestTemplates": {
+      "application/json": "{ statusCode: 200 }"
+     },
+     "Type": "MOCK"
+    },
+    "MethodResponses": [
+     {
+      "ResponseParameters": {
+       "method.response.header.Access-Control-Allow-Headers": true,
+       "method.response.header.Access-Control-Allow-Origin": true,
+       "method.response.header.Vary": true,
+       "method.response.header.Access-Control-Allow-Methods": true,
+       "method.response.header.Access-Control-Allow-Credentials": true,
+       "method.response.header.Access-Control-Max-Age": true
+      },
+      "StatusCode": "204"
+     }
+    ],
+    "ResourceId": {
+     "Ref": "AsaRacingApiauthdefineauthchallenge68C7B6FE"
+    },
+    "RestApiId": {
+     "Ref": "AsaRacingApiE4FF1702"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "AsaRacingStack/AsaRacingApi/AsaRacingApi/Default/auth/define-auth-challenge/OPTIONS/Resource"
+   }
+  },
+  "AsaRacingApiauthdefineauthchallengeGETApiPermissionAsaRacingStackAsaRacingApi56C117FCGETauthdefineauthchallengeD17BBF22": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "ApiLambdasLambdaauthdefineauthchallenge3852A3CE",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:us-west-1:619326977873:",
+       {
+        "Ref": "AsaRacingApiE4FF1702"
+       },
+       "/",
+       {
+        "Ref": "AsaRacingApiDeploymentStageprod82E0A178"
+       },
+       "/GET/auth/define-auth-challenge"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "AsaRacingStack/AsaRacingApi/AsaRacingApi/Default/auth/define-auth-challenge/GET/ApiPermission.AsaRacingStackAsaRacingApi56C117FC.GET..auth.define-auth-challenge"
+   }
+  },
+  "AsaRacingApiauthdefineauthchallengeGETApiPermissionTestAsaRacingStackAsaRacingApi56C117FCGETauthdefineauthchallengeEF0D4735": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "ApiLambdasLambdaauthdefineauthchallenge3852A3CE",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:us-west-1:619326977873:",
+       {
+        "Ref": "AsaRacingApiE4FF1702"
+       },
+       "/test-invoke-stage/GET/auth/define-auth-challenge"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "AsaRacingStack/AsaRacingApi/AsaRacingApi/Default/auth/define-auth-challenge/GET/ApiPermission.Test.AsaRacingStackAsaRacingApi56C117FC.GET..auth.define-auth-challenge"
+   }
+  },
+  "AsaRacingApiauthdefineauthchallengeGET5E5EF565": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "AuthorizationType": "NONE",
+    "HttpMethod": "GET",
+    "Integration": {
+     "IntegrationHttpMethod": "POST",
+     "IntegrationResponses": [
+      {
+       "ResponseParameters": {
+        "method.response.header.Access-Control-Allow-Origin": "'https://www.asaracing.live,http://localhost:3000'",
+        "method.response.header.Access-Control-Allow-Credentials": "'true'",
+        "method.response.header.Access-Control-Allow-Headers": "'Content-Type,Authorization,Cookie'",
+        "method.response.header.Access-Control-Allow-Methods": "'GET,POST,OPTIONS'",
+        "method.response.header.Access-Control-Expose-Headers": "'Set-Cookie'",
+        "method.response.header.Set-Cookie": "integration.response.header.Set-Cookie"
+       },
+       "StatusCode": "200"
+      }
+     ],
+     "Type": "AWS_PROXY",
+     "Uri": {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":apigateway:us-west-1:lambda:path/2015-03-31/functions/",
+        {
+         "Fn::GetAtt": [
+          "ApiLambdasLambdaauthdefineauthchallenge3852A3CE",
+          "Arn"
+         ]
+        },
+        "/invocations"
+       ]
+      ]
+     }
+    },
+    "MethodResponses": [
+     {
+      "ResponseParameters": {
+       "method.response.header.Access-Control-Allow-Origin": true,
+       "method.response.header.Access-Control-Allow-Credentials": true,
+       "method.response.header.Access-Control-Allow-Headers": true,
+       "method.response.header.Access-Control-Allow-Methods": true,
+       "method.response.header.Access-Control-Expose-Headers": true,
+       "method.response.header.Set-Cookie": true
+      },
+      "StatusCode": "200"
+     }
+    ],
+    "ResourceId": {
+     "Ref": "AsaRacingApiauthdefineauthchallenge68C7B6FE"
+    },
+    "RestApiId": {
+     "Ref": "AsaRacingApiE4FF1702"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "AsaRacingStack/AsaRacingApi/AsaRacingApi/Default/auth/define-auth-challenge/GET/Resource"
+   }
+  },
+  "AsaRacingApiauthmanagesessionD889E8D9": {
+   "Type": "AWS::ApiGateway::Resource",
+   "Properties": {
+    "ParentId": {
+     "Ref": "AsaRacingApiauthC526314E"
+    },
+    "PathPart": "manage-session",
+    "RestApiId": {
+     "Ref": "AsaRacingApiE4FF1702"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "AsaRacingStack/AsaRacingApi/AsaRacingApi/Default/auth/manage-session/Resource"
+   }
+  },
+  "AsaRacingApiauthmanagesessionOPTIONSF74FA8F4": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "ApiKeyRequired": false,
+    "AuthorizationType": "NONE",
+    "HttpMethod": "OPTIONS",
+    "Integration": {
+     "IntegrationResponses": [
+      {
+       "ResponseParameters": {
+        "method.response.header.Access-Control-Allow-Headers": "'Content-Type,Authorization,Cookie,X-Amz-Date,X-Api-Key,X-Amz-Security-Token'",
+        "method.response.header.Access-Control-Allow-Origin": "'https://www.asaracing.live'",
+        "method.response.header.Vary": "'Origin'",
+        "method.response.header.Access-Control-Allow-Methods": "'GET,POST,OPTIONS'",
+        "method.response.header.Access-Control-Allow-Credentials": "'true'",
+        "method.response.header.Access-Control-Max-Age": "'300'"
+       },
+       "ResponseTemplates": {
+        "application/json": "#set($origin = $input.params().header.get(\"Origin\"))\n#if($origin == \"\")\n  #set($origin = $input.params().header.get(\"origin\"))\n#end\n#if($origin == \"http://localhost:3000\")\n  #set($context.responseOverride.header.Access-Control-Allow-Origin = $origin)\n#end"
+       },
+       "StatusCode": "204"
+      }
+     ],
+     "RequestTemplates": {
+      "application/json": "{ statusCode: 200 }"
+     },
+     "Type": "MOCK"
+    },
+    "MethodResponses": [
+     {
+      "ResponseParameters": {
+       "method.response.header.Access-Control-Allow-Headers": true,
+       "method.response.header.Access-Control-Allow-Origin": true,
+       "method.response.header.Vary": true,
+       "method.response.header.Access-Control-Allow-Methods": true,
+       "method.response.header.Access-Control-Allow-Credentials": true,
+       "method.response.header.Access-Control-Max-Age": true
+      },
+      "StatusCode": "204"
+     }
+    ],
+    "ResourceId": {
+     "Ref": "AsaRacingApiauthmanagesessionD889E8D9"
+    },
+    "RestApiId": {
+     "Ref": "AsaRacingApiE4FF1702"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "AsaRacingStack/AsaRacingApi/AsaRacingApi/Default/auth/manage-session/OPTIONS/Resource"
+   }
+  },
+  "AsaRacingApiauthmanagesessionPOSTApiPermissionAsaRacingStackAsaRacingApi56C117FCPOSTauthmanagesessionD9422FD4": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "ApiLambdasLambdaauthmanagesessionA07F4853",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:us-west-1:619326977873:",
+       {
+        "Ref": "AsaRacingApiE4FF1702"
+       },
+       "/",
+       {
+        "Ref": "AsaRacingApiDeploymentStageprod82E0A178"
+       },
+       "/POST/auth/manage-session"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "AsaRacingStack/AsaRacingApi/AsaRacingApi/Default/auth/manage-session/POST/ApiPermission.AsaRacingStackAsaRacingApi56C117FC.POST..auth.manage-session"
+   }
+  },
+  "AsaRacingApiauthmanagesessionPOSTApiPermissionTestAsaRacingStackAsaRacingApi56C117FCPOSTauthmanagesession03307AD0": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "ApiLambdasLambdaauthmanagesessionA07F4853",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:us-west-1:619326977873:",
+       {
+        "Ref": "AsaRacingApiE4FF1702"
+       },
+       "/test-invoke-stage/POST/auth/manage-session"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "AsaRacingStack/AsaRacingApi/AsaRacingApi/Default/auth/manage-session/POST/ApiPermission.Test.AsaRacingStackAsaRacingApi56C117FC.POST..auth.manage-session"
+   }
+  },
+  "AsaRacingApiauthmanagesessionPOSTD884EC75": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "AuthorizationType": "NONE",
+    "HttpMethod": "POST",
+    "Integration": {
+     "IntegrationHttpMethod": "POST",
+     "IntegrationResponses": [
+      {
+       "ResponseParameters": {
+        "method.response.header.Access-Control-Allow-Origin": "'https://www.asaracing.live,http://localhost:3000'",
+        "method.response.header.Access-Control-Allow-Credentials": "'true'",
+        "method.response.header.Access-Control-Allow-Headers": "'Content-Type,Authorization,Cookie'",
+        "method.response.header.Access-Control-Allow-Methods": "'GET,POST,OPTIONS'",
+        "method.response.header.Access-Control-Expose-Headers": "'Set-Cookie'",
+        "method.response.header.Set-Cookie": "integration.response.header.Set-Cookie"
+       },
+       "StatusCode": "200"
+      }
+     ],
+     "Type": "AWS_PROXY",
+     "Uri": {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":apigateway:us-west-1:lambda:path/2015-03-31/functions/",
+        {
+         "Fn::GetAtt": [
+          "ApiLambdasLambdaauthmanagesessionA07F4853",
+          "Arn"
+         ]
+        },
+        "/invocations"
+       ]
+      ]
+     }
+    },
+    "MethodResponses": [
+     {
+      "ResponseParameters": {
+       "method.response.header.Access-Control-Allow-Origin": true,
+       "method.response.header.Access-Control-Allow-Credentials": true,
+       "method.response.header.Access-Control-Allow-Headers": true,
+       "method.response.header.Access-Control-Allow-Methods": true,
+       "method.response.header.Access-Control-Expose-Headers": true,
+       "method.response.header.Set-Cookie": true
+      },
+      "StatusCode": "200"
+     }
+    ],
+    "ResourceId": {
+     "Ref": "AsaRacingApiauthmanagesessionD889E8D9"
+    },
+    "RestApiId": {
+     "Ref": "AsaRacingApiE4FF1702"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "AsaRacingStack/AsaRacingApi/AsaRacingApi/Default/auth/manage-session/POST/Resource"
+   }
+  },
+  "AsaRacingApiauthmanagesessionverifyF8F4996B": {
+   "Type": "AWS::ApiGateway::Resource",
+   "Properties": {
+    "ParentId": {
+     "Ref": "AsaRacingApiauthmanagesessionD889E8D9"
+    },
+    "PathPart": "verify",
+    "RestApiId": {
+     "Ref": "AsaRacingApiE4FF1702"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "AsaRacingStack/AsaRacingApi/AsaRacingApi/Default/auth/manage-session/verify/Resource"
+   }
+  },
+  "AsaRacingApiauthmanagesessionverifyOPTIONSE6DC184C": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "ApiKeyRequired": false,
+    "AuthorizationType": "NONE",
+    "HttpMethod": "OPTIONS",
+    "Integration": {
+     "IntegrationResponses": [
+      {
+       "ResponseParameters": {
+        "method.response.header.Access-Control-Allow-Headers": "'Content-Type,Authorization,Cookie,X-Amz-Date,X-Api-Key,X-Amz-Security-Token'",
+        "method.response.header.Access-Control-Allow-Origin": "'https://www.asaracing.live'",
+        "method.response.header.Vary": "'Origin'",
+        "method.response.header.Access-Control-Allow-Methods": "'GET,POST,OPTIONS'",
+        "method.response.header.Access-Control-Allow-Credentials": "'true'",
+        "method.response.header.Access-Control-Max-Age": "'300'"
+       },
+       "ResponseTemplates": {
+        "application/json": "#set($origin = $input.params().header.get(\"Origin\"))\n#if($origin == \"\")\n  #set($origin = $input.params().header.get(\"origin\"))\n#end\n#if($origin == \"http://localhost:3000\")\n  #set($context.responseOverride.header.Access-Control-Allow-Origin = $origin)\n#end"
+       },
+       "StatusCode": "204"
+      }
+     ],
+     "RequestTemplates": {
+      "application/json": "{ statusCode: 200 }"
+     },
+     "Type": "MOCK"
+    },
+    "MethodResponses": [
+     {
+      "ResponseParameters": {
+       "method.response.header.Access-Control-Allow-Headers": true,
+       "method.response.header.Access-Control-Allow-Origin": true,
+       "method.response.header.Vary": true,
+       "method.response.header.Access-Control-Allow-Methods": true,
+       "method.response.header.Access-Control-Allow-Credentials": true,
+       "method.response.header.Access-Control-Max-Age": true
+      },
+      "StatusCode": "204"
+     }
+    ],
+    "ResourceId": {
+     "Ref": "AsaRacingApiauthmanagesessionverifyF8F4996B"
+    },
+    "RestApiId": {
+     "Ref": "AsaRacingApiE4FF1702"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "AsaRacingStack/AsaRacingApi/AsaRacingApi/Default/auth/manage-session/verify/OPTIONS/Resource"
+   }
+  },
+  "AsaRacingApiauthmanagesessionverifyGETApiPermissionAsaRacingStackAsaRacingApi56C117FCGETauthmanagesessionverifyBAEB5FF9": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "ApiLambdasLambdaauthmanagesessionA07F4853",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:us-west-1:619326977873:",
+       {
+        "Ref": "AsaRacingApiE4FF1702"
+       },
+       "/",
+       {
+        "Ref": "AsaRacingApiDeploymentStageprod82E0A178"
+       },
+       "/GET/auth/manage-session/verify"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "AsaRacingStack/AsaRacingApi/AsaRacingApi/Default/auth/manage-session/verify/GET/ApiPermission.AsaRacingStackAsaRacingApi56C117FC.GET..auth.manage-session.verify"
+   }
+  },
+  "AsaRacingApiauthmanagesessionverifyGETApiPermissionTestAsaRacingStackAsaRacingApi56C117FCGETauthmanagesessionverify3CCE1105": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "ApiLambdasLambdaauthmanagesessionA07F4853",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:us-west-1:619326977873:",
+       {
+        "Ref": "AsaRacingApiE4FF1702"
+       },
+       "/test-invoke-stage/GET/auth/manage-session/verify"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "AsaRacingStack/AsaRacingApi/AsaRacingApi/Default/auth/manage-session/verify/GET/ApiPermission.Test.AsaRacingStackAsaRacingApi56C117FC.GET..auth.manage-session.verify"
+   }
+  },
+  "AsaRacingApiauthmanagesessionverifyGET4DBEF15D": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "AuthorizationType": "NONE",
+    "HttpMethod": "GET",
+    "Integration": {
+     "IntegrationHttpMethod": "POST",
+     "IntegrationResponses": [
+      {
+       "ResponseParameters": {
+        "method.response.header.Access-Control-Allow-Origin": "'https://www.asaracing.live,http://localhost:3000'",
+        "method.response.header.Access-Control-Allow-Credentials": "'true'",
+        "method.response.header.Access-Control-Allow-Headers": "'Content-Type,Authorization,Cookie'",
+        "method.response.header.Access-Control-Allow-Methods": "'GET,POST,OPTIONS'",
+        "method.response.header.Access-Control-Expose-Headers": "'Set-Cookie'",
+        "method.response.header.Set-Cookie": "integration.response.header.Set-Cookie"
+       },
+       "StatusCode": "200"
+      }
+     ],
+     "Type": "AWS_PROXY",
+     "Uri": {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":apigateway:us-west-1:lambda:path/2015-03-31/functions/",
+        {
+         "Fn::GetAtt": [
+          "ApiLambdasLambdaauthmanagesessionA07F4853",
+          "Arn"
+         ]
+        },
+        "/invocations"
+       ]
+      ]
+     }
+    },
+    "MethodResponses": [
+     {
+      "ResponseParameters": {
+       "method.response.header.Access-Control-Allow-Origin": true,
+       "method.response.header.Access-Control-Allow-Credentials": true,
+       "method.response.header.Access-Control-Allow-Headers": true,
+       "method.response.header.Access-Control-Allow-Methods": true,
+       "method.response.header.Access-Control-Expose-Headers": true,
+       "method.response.header.Set-Cookie": true
+      },
+      "StatusCode": "200"
+     }
+    ],
+    "ResourceId": {
+     "Ref": "AsaRacingApiauthmanagesessionverifyF8F4996B"
+    },
+    "RestApiId": {
+     "Ref": "AsaRacingApiE4FF1702"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "AsaRacingStack/AsaRacingApi/AsaRacingApi/Default/auth/manage-session/verify/GET/Resource"
+   }
+  },
+  "AsaRacingApiauthverifyauthchallengeC5656351": {
+   "Type": "AWS::ApiGateway::Resource",
+   "Properties": {
+    "ParentId": {
+     "Ref": "AsaRacingApiauthC526314E"
+    },
+    "PathPart": "verify-auth-challenge",
+    "RestApiId": {
+     "Ref": "AsaRacingApiE4FF1702"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "AsaRacingStack/AsaRacingApi/AsaRacingApi/Default/auth/verify-auth-challenge/Resource"
+   }
+  },
+  "AsaRacingApiauthverifyauthchallengeOPTIONS7E47379E": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "ApiKeyRequired": false,
+    "AuthorizationType": "NONE",
+    "HttpMethod": "OPTIONS",
+    "Integration": {
+     "IntegrationResponses": [
+      {
+       "ResponseParameters": {
+        "method.response.header.Access-Control-Allow-Headers": "'Content-Type,Authorization,Cookie,X-Amz-Date,X-Api-Key,X-Amz-Security-Token'",
+        "method.response.header.Access-Control-Allow-Origin": "'https://www.asaracing.live'",
+        "method.response.header.Vary": "'Origin'",
+        "method.response.header.Access-Control-Allow-Methods": "'GET,POST,OPTIONS'",
+        "method.response.header.Access-Control-Allow-Credentials": "'true'",
+        "method.response.header.Access-Control-Max-Age": "'300'"
+       },
+       "ResponseTemplates": {
+        "application/json": "#set($origin = $input.params().header.get(\"Origin\"))\n#if($origin == \"\")\n  #set($origin = $input.params().header.get(\"origin\"))\n#end\n#if($origin == \"http://localhost:3000\")\n  #set($context.responseOverride.header.Access-Control-Allow-Origin = $origin)\n#end"
+       },
+       "StatusCode": "204"
+      }
+     ],
+     "RequestTemplates": {
+      "application/json": "{ statusCode: 200 }"
+     },
+     "Type": "MOCK"
+    },
+    "MethodResponses": [
+     {
+      "ResponseParameters": {
+       "method.response.header.Access-Control-Allow-Headers": true,
+       "method.response.header.Access-Control-Allow-Origin": true,
+       "method.response.header.Vary": true,
+       "method.response.header.Access-Control-Allow-Methods": true,
+       "method.response.header.Access-Control-Allow-Credentials": true,
+       "method.response.header.Access-Control-Max-Age": true
+      },
+      "StatusCode": "204"
+     }
+    ],
+    "ResourceId": {
+     "Ref": "AsaRacingApiauthverifyauthchallengeC5656351"
+    },
+    "RestApiId": {
+     "Ref": "AsaRacingApiE4FF1702"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "AsaRacingStack/AsaRacingApi/AsaRacingApi/Default/auth/verify-auth-challenge/OPTIONS/Resource"
+   }
+  },
+  "AsaRacingApiauthverifyauthchallengeGETApiPermissionAsaRacingStackAsaRacingApi56C117FCGETauthverifyauthchallenge7CF2B173": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "ApiLambdasLambdaauthverifyauthchallenge452EFF04",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:us-west-1:619326977873:",
+       {
+        "Ref": "AsaRacingApiE4FF1702"
+       },
+       "/",
+       {
+        "Ref": "AsaRacingApiDeploymentStageprod82E0A178"
+       },
+       "/GET/auth/verify-auth-challenge"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "AsaRacingStack/AsaRacingApi/AsaRacingApi/Default/auth/verify-auth-challenge/GET/ApiPermission.AsaRacingStackAsaRacingApi56C117FC.GET..auth.verify-auth-challenge"
+   }
+  },
+  "AsaRacingApiauthverifyauthchallengeGETApiPermissionTestAsaRacingStackAsaRacingApi56C117FCGETauthverifyauthchallenge4ED7470D": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "ApiLambdasLambdaauthverifyauthchallenge452EFF04",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:us-west-1:619326977873:",
+       {
+        "Ref": "AsaRacingApiE4FF1702"
+       },
+       "/test-invoke-stage/GET/auth/verify-auth-challenge"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "AsaRacingStack/AsaRacingApi/AsaRacingApi/Default/auth/verify-auth-challenge/GET/ApiPermission.Test.AsaRacingStackAsaRacingApi56C117FC.GET..auth.verify-auth-challenge"
+   }
+  },
+  "AsaRacingApiauthverifyauthchallengeGET848B73B5": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "AuthorizationType": "NONE",
+    "HttpMethod": "GET",
+    "Integration": {
+     "IntegrationHttpMethod": "POST",
+     "IntegrationResponses": [
+      {
+       "ResponseParameters": {
+        "method.response.header.Access-Control-Allow-Origin": "'https://www.asaracing.live,http://localhost:3000'",
+        "method.response.header.Access-Control-Allow-Credentials": "'true'",
+        "method.response.header.Access-Control-Allow-Headers": "'Content-Type,Authorization,Cookie'",
+        "method.response.header.Access-Control-Allow-Methods": "'GET,POST,OPTIONS'",
+        "method.response.header.Access-Control-Expose-Headers": "'Set-Cookie'",
+        "method.response.header.Set-Cookie": "integration.response.header.Set-Cookie"
+       },
+       "StatusCode": "200"
+      }
+     ],
+     "Type": "AWS_PROXY",
+     "Uri": {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":apigateway:us-west-1:lambda:path/2015-03-31/functions/",
+        {
+         "Fn::GetAtt": [
+          "ApiLambdasLambdaauthverifyauthchallenge452EFF04",
+          "Arn"
+         ]
+        },
+        "/invocations"
+       ]
+      ]
+     }
+    },
+    "MethodResponses": [
+     {
+      "ResponseParameters": {
+       "method.response.header.Access-Control-Allow-Origin": true,
+       "method.response.header.Access-Control-Allow-Credentials": true,
+       "method.response.header.Access-Control-Allow-Headers": true,
+       "method.response.header.Access-Control-Allow-Methods": true,
+       "method.response.header.Access-Control-Expose-Headers": true,
+       "method.response.header.Set-Cookie": true
+      },
+      "StatusCode": "200"
+     }
+    ],
+    "ResourceId": {
+     "Ref": "AsaRacingApiauthverifyauthchallengeC5656351"
+    },
+    "RestApiId": {
+     "Ref": "AsaRacingApiE4FF1702"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "AsaRacingStack/AsaRacingApi/AsaRacingApi/Default/auth/verify-auth-challenge/GET/Resource"
+   }
+  },
+  "AsaRacingDomain406518F7": {
+   "Type": "AWS::SES::EmailIdentity",
+   "Properties": {
+    "DkimAttributes": {
+     "SigningEnabled": true
+    },
+    "EmailIdentity": "asaracing.live",
+    "MailFromAttributes": {
+     "MailFromDomain": "mail.asaracing.live"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "AsaRacingStack/AsaRacingDomain/Resource"
+   }
+  },
+  "DkimRecord07BE77F4F": {
+   "Type": "AWS::Route53::RecordSet",
+   "Properties": {
+    "HostedZoneId": "Z04794862UTJ4V1BLEDTH",
+    "Name": {
+     "Fn::Join": [
+      "",
+      [
+       {
+        "Fn::GetAtt": [
+         "AsaRacingDomain406518F7",
+         "DkimDNSTokenName1"
+        ]
+       },
+       ".asaracing.live."
+      ]
+     ]
+    },
+    "ResourceRecords": [
+     {
+      "Fn::GetAtt": [
+       "AsaRacingDomain406518F7",
+       "DkimDNSTokenValue1"
+      ]
+     }
+    ],
+    "TTL": "1800",
+    "Type": "CNAME"
+   },
+   "Metadata": {
+    "aws:cdk:path": "AsaRacingStack/DkimRecord0/Resource"
+   }
+  },
+  "DkimRecord106FDF84B": {
+   "Type": "AWS::Route53::RecordSet",
+   "Properties": {
+    "HostedZoneId": "Z04794862UTJ4V1BLEDTH",
+    "Name": {
+     "Fn::Join": [
+      "",
+      [
+       {
+        "Fn::GetAtt": [
+         "AsaRacingDomain406518F7",
+         "DkimDNSTokenName2"
+        ]
+       },
+       ".asaracing.live."
+      ]
+     ]
+    },
+    "ResourceRecords": [
+     {
+      "Fn::GetAtt": [
+       "AsaRacingDomain406518F7",
+       "DkimDNSTokenValue2"
+      ]
+     }
+    ],
+    "TTL": "1800",
+    "Type": "CNAME"
+   },
+   "Metadata": {
+    "aws:cdk:path": "AsaRacingStack/DkimRecord1/Resource"
+   }
+  },
+  "DkimRecord2C41042AD": {
+   "Type": "AWS::Route53::RecordSet",
+   "Properties": {
+    "HostedZoneId": "Z04794862UTJ4V1BLEDTH",
+    "Name": {
+     "Fn::Join": [
+      "",
+      [
+       {
+        "Fn::GetAtt": [
+         "AsaRacingDomain406518F7",
+         "DkimDNSTokenName3"
+        ]
+       },
+       ".asaracing.live."
+      ]
+     ]
+    },
+    "ResourceRecords": [
+     {
+      "Fn::GetAtt": [
+       "AsaRacingDomain406518F7",
+       "DkimDNSTokenValue3"
+      ]
+     }
+    ],
+    "TTL": "1800",
+    "Type": "CNAME"
+   },
+   "Metadata": {
+    "aws:cdk:path": "AsaRacingStack/DkimRecord2/Resource"
+   }
+  },
+  "SesVerificationRecord0152607B": {
+   "Type": "AWS::Route53::RecordSet",
+   "Properties": {
+    "HostedZoneId": "Z04794862UTJ4V1BLEDTH",
+    "Name": "_amazonses.asaracing.live.",
+    "ResourceRecords": [
+     "\"hXuwSsyi8HQdjQ4ulftSUrRx0qXtMpYM9z8SNAni2kQ=\""
+    ],
+    "TTL": "1800",
+    "Type": "TXT"
+   },
+   "Metadata": {
+    "aws:cdk:path": "AsaRacingStack/SesVerificationRecord/Resource"
+   }
+  },
+  "SesMailFromMx673564D3": {
+   "Type": "AWS::Route53::RecordSet",
+   "Properties": {
+    "HostedZoneId": "Z04794862UTJ4V1BLEDTH",
+    "Name": "mail.asaracing.live.",
+    "ResourceRecords": [
+     "10 feedback-smtp.us-west-1.amazonses.com"
+    ],
+    "TTL": "1800",
+    "Type": "MX"
+   },
+   "Metadata": {
+    "aws:cdk:path": "AsaRacingStack/SesMailFromMx/Resource"
+   }
+  },
+  "SesMailFromSpfD2269C5A": {
+   "Type": "AWS::Route53::RecordSet",
+   "Properties": {
+    "HostedZoneId": "Z04794862UTJ4V1BLEDTH",
+    "Name": "mail.asaracing.live.",
+    "ResourceRecords": [
+     "\"v=spf1 include:amazonses.com ~all\""
+    ],
+    "TTL": "1800",
+    "Type": "TXT"
+   },
+   "Metadata": {
+    "aws:cdk:path": "AsaRacingStack/SesMailFromSpf/Resource"
+   }
+  },
+  "CDKMetadata": {
+   "Type": "AWS::CDK::Metadata",
+   "Properties": {
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/22SwW7bMAxAv6V3RVsSrPfUXYEByxo4HXYMZJlxmciiIUpNA0H/Pkh2m7ToiY/kgyTSXsj57a38fqNOPNPtcWawkXHrlT4KdeJd5KWMd0EfwYtqbycaw4YM6vOlPOVjcqcYkmjPVvXUNjI+qcZAdgskgaqXsaaxVuLluJGS0IZCu3dkvYyPDju0K62B+VcL1qMvbpWdh+x8adwje4dN8Eg269d5EppaaAKaVsYNDmDQwsbRAXQZdsJRG6b+xSzKFf+D5pnomISj4OHHUsZVDZpcWyYstM1btKqHqfH06idav46QhFF906qdpRYOLP+U8BCsLhPwcqeYwbNc5TDJMlZ7++7kZ4HrkXmasbPoSca/DG5DZLLwzm9QGQTrr1tjJQlDHcvf1NXg807JCjVgpzyc1FnGGtivBhxHfMeV1hSsF/cwGDr308lX2darrixthBqYgtOQfxqxBv9MZWkTvXWnSwonwcAy/uwVmuvf4UMhJVEF9tR/dcKn1sbRC7bgyhPKcvPT0HYfrl+rYci1am8fgx+CTyJ/KHngby+LhZwv5fzmwIgzF6zHHmQ9xv/EHY2IZgMAAA=="
+   },
+   "Metadata": {
+    "aws:cdk:path": "AsaRacingStack/CDKMetadata/Default"
+   }
+  }
+ },
+ "Mappings": {
+  "AWSCloudFrontPartitionHostedZoneIdMap": {
+   "aws": {
+    "zoneId": "Z2FDTNDATAQYW2"
+   },
+   "aws-cn": {
+    "zoneId": "Z3RFFRIM2A3IF5"
+   }
+  }
+ },
+ "Outputs": {
+  "HostedZoneId": {
+   "Description": "Hosted Zone ID",
+   "Value": "Z04794862UTJ4V1BLEDTH",
+   "Export": {
+    "Name": "HostedZoneId"
+   }
+  },
+  "AsaRacingApiEndpointFA9C9D72": {
+   "Value": {
+    "Fn::Join": [
+     "",
+     [
+      "https://",
+      {
+       "Ref": "AsaRacingApiE4FF1702"
+      },
+      ".execute-api.us-west-1.",
+      {
+       "Ref": "AWS::URLSuffix"
+      },
+      "/",
+      {
+       "Ref": "AsaRacingApiDeploymentStageprod82E0A178"
+      },
+      "/"
+     ]
+    ]
+   }
+  },
+  "DynamoDBTableName": {
+   "Description": "Name of the DynamoDB table",
+   "Value": {
+    "Ref": "KlineTable986A720B"
+   },
+   "Export": {
+    "Name": "asaRacingTableName"
+   }
+  },
+  "asaRacingBucketName": {
+   "Description": "Name of the S3 bucket for deployments",
+   "Value": {
+    "Ref": "S3ConstructasaRacingAPIBucketCDB90C88"
+   }
+  },
+  "NextJSWebsiteURL": {
+   "Description": "Next.js Website URL",
+   "Value": {
+    "Fn::Join": [
+     "",
+     [
+      "https://",
+      {
+       "Fn::GetAtt": [
+        "AsaRacingNextJSPipelineConstructV2WebsiteDistribution14D0C0DD",
+        "DomainName"
+       ]
+      }
+     ]
+    ]
+   }
+  },
+  "NextJSPipelineArn": {
+   "Description": "Next.js Pipeline ARN",
+   "Value": {
+    "Fn::Join": [
+     "",
+     [
+      "arn:",
+      {
+       "Ref": "AWS::Partition"
+      },
+      ":codepipeline:us-west-1:619326977873:",
+      {
+       "Ref": "AsaRacingNextJSPipelineConstructV2Pipeline383ACCBF"
+      }
+     ]
+    ]
+   }
+  },
+  "CognitoUserPoolId": {
+   "Description": "Cognito User Pool ID",
+   "Value": {
+    "Ref": "CognitoPool9328EF5E"
+   },
+   "Export": {
+    "Name": "CognitoUserPoolId"
+   }
+  },
+  "CognitoClientId": {
+   "Description": "Cognito Client ID",
+   "Value": {
+    "Ref": "CognitoPoolMyAppClient1CD10A1A"
+   },
+   "Export": {
+    "Name": "CognitoClientId"
+   }
+  },
+  "ApiGatewayUrl": {
+   "Description": "API Gateway URL",
+   "Value": {
+    "Fn::Join": [
+     "",
+     [
+      "https://",
+      {
+       "Ref": "AsaRacingApiE4FF1702"
+      },
+      ".execute-api.us-west-1.",
+      {
+       "Ref": "AWS::URLSuffix"
+      },
+      "/",
+      {
+       "Ref": "AsaRacingApiDeploymentStageprod82E0A178"
+      },
+      "/"
+     ]
+    ]
+   }
+  }
+ },
+ "Parameters": {
+  "BootstrapVersion": {
+   "Type": "AWS::SSM::Parameter::Value<String>",
+   "Default": "/cdk-bootstrap/hnb659fds/version",
+   "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]"
+  }
+ },
+ "Rules": {
+  "CheckBootstrapVersion": {
+   "Assertions": [
+    {
+     "Assert": {
+      "Fn::Not": [
+       {
+        "Fn::Contains": [
+         [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5"
+         ],
+         {
+          "Ref": "BootstrapVersion"
+         }
+        ]
+       }
+      ]
+     },
+     "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI."
+    }
+   ]
+  }
+ }
+}
